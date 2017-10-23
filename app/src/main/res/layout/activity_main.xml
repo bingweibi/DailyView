@@ -7,31 +7,33 @@
     android:orientation="vertical"
     tools:context="com.example.bbw.openzz.MainActivity">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/viewPager"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1">-->
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            app:tabIndicatorColor="#ADD8E6"
-            app:tabTextColor="#000000"
-            app:tabMode="fixed"
-            app:tabTextAppearance="@style/TabLayoutTextAppearance">
-        </android.support.design.widget.TabLayout>
-    </android.support.v4.view.ViewPager>
+        <!--<android.support.design.widget.TabLayout-->
+            <!--android:id="@+id/tabLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--app:tabIndicatorColor="#ADD8E6"-->
+            <!--app:tabTextColor="#000000"-->
+            <!--app:tabMode="fixed"-->
+            <!--app:tabTextAppearance="@style/TabLayoutTextAppearance">-->
+        <!--</android.support.design.widget.TabLayout>-->
+    <!--</android.support.v4.view.ViewPager>-->
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabBottomLayout"
+    <FrameLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:tabIndicatorColor="#ADD8E6"
-        app:tabTextColor="#000000"
-        app:tabMode="fixed"
-        app:tabTextAppearance="@style/TabLayoutTextAppearance">
-    </android.support.design.widget.TabLayout>
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <android.support.v4.app.FragmentTabHost
+        android:id="@+id/bottom_tab"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </android.support.v4.app.FragmentTabHost>
 
 </LinearLayout>
