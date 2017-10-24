@@ -4,6 +4,7 @@ package com.example.bbw.openzz;
  * @author bibingwei
  */
 
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.ViewPager;
@@ -21,81 +22,56 @@ import com.example.bbw.openzz.tabRes.TabRes;
 public class MainActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
 
     private FragmentTabHost mFragmentTabHost;
-//    private TabLayout mTabLayout;
-//    private ViewPager mViewPager;
-//    private FragmentOneAdapter mFragmentOneAdapter;
-//
-//    private TabLayout.Tab mTabOne;
-//    private TabLayout.Tab mTabTwo;
-//    private TabLayout.Tab mTabThree;
-//    private TabLayout.Tab mTabFour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //初始化视图
-        //initViews();
-        //初始化FragmentTabHost
-        initHost();
+        mFragmentTabHost = super.findViewById(android.R.id.tabhost);
+        mFragmentTabHost.setup(this,super.getSupportFragmentManager(),R.id.main_content);
+        mFragmentTabHost.getTabWidget().setDividerDrawable(null);
+        mFragmentTabHost.setOnTabChangedListener(this);
+
         //初始化底部导航栏
         initTab();
         //默认选中日报
-        mFragmentTabHost.onTabChanged(TabRes.getTabText()[0]);
+        //mFragmentTabHost.onTabChanged(TabRes.getTabText()[0]);
     }
 
     private void initTab() {
 
-        String[] tabs = TabRes.getTabText();
-        for (int i=0; i<tabs.length; i++){
-            //新建TabSpec
-            TabHost.TabSpec tabSpec = mFragmentTabHost.newTabSpec(TabRes.getTabText()[i]).setIndicator(TabRes.getTabText()[i]);
-            //设置view
-            View view = LayoutInflater.from(this).inflate(R.layout.bottom_tab_foot,null);
-            ((TextView)view.findViewById(R.id.bottom_tab_text)).setText(TabRes.getTabText()[i]);
-            //加入tabSpec
-            mFragmentTabHost.addTab(tabSpec,TabRes.getFragment()[i],null);
+        String tabs[]  = TabRes.getTabText();
+        for (int i=0;i<tabs.length;i++){
+            TabHost.TabSpec mTabSpec = mFragmentTabHost.newTabSpec(tabs[i]).setIndicator(getTabView(i));
+            mFragmentTabHost.addTab(mTabSpec,TabRes.getFragment()[i],null);
+            mFragmentTabHost.setTag(i);
         }
     }
 
-    private void initHost() {
-
-        mFragmentTabHost = findViewById(R.id.bottom_tab);
-        //调用setup方法，设置view
-        mFragmentTabHost.setup(this,getSupportFragmentManager(),R.id.main_content);
-        //去除分割线
-        mFragmentTabHost.getTabWidget().setDividerDrawable(null);
-        //监听事件
-        mFragmentTabHost.setOnTabChangedListener(this);
+    private View getTabView(int index) {
+        View view = LayoutInflater.from(this).inflate(R.layout.footer_tabs,null);
+        ((TextView)view.findViewById(R.id.textViewTab)).setText(TabRes.getTabText()[index]);
+        if (index == 0){
+            ((TextView)view.findViewById(R.id.textViewTab)).setTextColor(Color.RED);
+        }
+        return view;
     }
-
-//    private void initViews() {
-//
-//        //使用适配器蒋ViewPager与Fragment绑定在一起
-//        mViewPager = findViewById(R.id.viewPager);
-//        mFragmentOneAdapter = new FragmentOneAdapter(getSupportFragmentManager());
-//        mViewPager.setAdapter(mFragmentOneAdapter);
-//
-//        //将TabLayout与ViewPager绑定在一起
-//        mTabLayout = findViewById(R.id.tabLayout);
-//        mTabLayout.setupWithViewPager(mViewPager);
-////        mTabBottomLayout.setupWithViewPager(mViewPager);
-//
-//        //指定Tab的位置
-//        mTabOne = mTabLayout.getTabAt(0);
-//        mTabTwo = mTabLayout.getTabAt(1);
-//        mTabThree = mTabLayout.getTabAt(2);
-//        mTabFour = mTabLayout.getTabAt(3);
-//    }
 
     @Override
     public void onTabChanged(String s) {
-        //从分割线中获得多少个切换界面
+        updateTab();
+    }
+
+    private void updateTab() {
         TabWidget mTabWidget = mFragmentTabHost.getTabWidget();
-        for (int i =0; i<mTabWidget.getChildCount();i++){
+        for (int i=0;i<mTabWidget.getChildCount();i++){
             View view = mTabWidget.getChildAt(i);
-            TextView mTextView = view.findViewById(R.id.bottom_tab_text);
+            if (i == mFragmentTabHost.getCurrentTab()){
+                ((TextView)view.findViewById(R.id.textViewTab)).setTextColor(Color.RED);
+            }else {
+                ((TextView)view.findViewById(R.id.textViewTab)).setTextColor(Color.GRAY);
+            }
         }
     }
 }
