@@ -5,9 +5,7 @@ package com.example.bbw.openzz;
  */
 
 import android.graphics.Color;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +14,6 @@ import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
-import com.example.bbw.openzz.adapter.FragmentOneAdapter;
 import com.example.bbw.openzz.tabRes.TabRes;
 
 public class MainActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
@@ -35,8 +32,6 @@ public class MainActivity extends AppCompatActivity implements TabHost.OnTabChan
 
         //初始化底部导航栏
         initTab();
-        //默认选中日报
-        //mFragmentTabHost.onTabChanged(TabRes.getTabText()[0]);
     }
 
     private void initTab() {
@@ -50,10 +45,10 @@ public class MainActivity extends AppCompatActivity implements TabHost.OnTabChan
     }
 
     private View getTabView(int index) {
-        View view = LayoutInflater.from(this).inflate(R.layout.footer_tabs,null);
-        ((TextView)view.findViewById(R.id.textViewTab)).setText(TabRes.getTabText()[index]);
+        View view = LayoutInflater.from(this).inflate(R.layout.tab_content,null);
+        ((TextView)view.findViewById(R.id.tab_content)).setText(TabRes.getTabText()[index]);
         if (index == 0){
-            ((TextView)view.findViewById(R.id.textViewTab)).setTextColor(Color.RED);
+            ((TextView)view.findViewById(R.id.tab_content)).setTextColor(Color.RED);
         }
         return view;
     }
@@ -68,9 +63,9 @@ public class MainActivity extends AppCompatActivity implements TabHost.OnTabChan
         for (int i=0;i<mTabWidget.getChildCount();i++){
             View view = mTabWidget.getChildAt(i);
             if (i == mFragmentTabHost.getCurrentTab()){
-                ((TextView)view.findViewById(R.id.textViewTab)).setTextColor(Color.RED);
+                ((TextView)view.findViewById(R.id.tab_content)).setTextColor(Color.parseColor("#FFB6C1"));
             }else {
-                ((TextView)view.findViewById(R.id.textViewTab)).setTextColor(Color.GRAY);
+                ((TextView)view.findViewById(R.id.tab_content)).setTextColor(Color.BLACK);
             }
         }
     }
