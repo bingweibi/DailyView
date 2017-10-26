@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements TabHost.OnTabChan
 
     private void initTab() {
 
-        String tabs[]  = TabRes.getTabText();
+        String[] tabs  = TabRes.getTabText();
         for (int i=0;i<tabs.length;i++){
             TabHost.TabSpec mTabSpec = mFragmentTabHost.newTabSpec(tabs[i]).setIndicator(getTabView(i));
             mFragmentTabHost.addTab(mTabSpec,TabRes.getFragment()[i],null);
