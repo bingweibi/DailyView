@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="openZZ"/>
+    <version value="1"/>
+    <list>
+        <mapping class="com.example.bbw.openzz.db.DailyDreamBean"/>
+        <mapping class="com.example.bbw.openzz.db.ZhiHuDailyBean"/>
+        <mapping class="com.example.bbw.openzz.db.GuokrBean"/>
+        <mapping class="com.example.bbw.openzz.db.PicBean"/>
+    </list>
+</litepal>
