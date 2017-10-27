@@ -12,7 +12,4 @@ import java.util.List;
 public class ZhiHuDailyLatest {
 
     private List<Stories> storiesList;
-
-    @SerializedName("top_stories")
-    private List<TopStories> topStoriesList;
 }

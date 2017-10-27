@@ -9,5 +9,31 @@ import org.litepal.crud.DataSupport;
 
 public class ZhiHuDailyBean extends DataSupport{
 
+    private int id;
+    private String imageUrl;
+    private String ContentUrl;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getContentUrl() {
+        return ContentUrl;
+    }
+
+    public void setContentUrl(String contentUrl) {
+        ContentUrl = contentUrl;
+    }
 }

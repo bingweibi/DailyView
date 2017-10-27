@@ -11,5 +11,4 @@ public class PicRecommend {
 
     private String result;
     private List<FeedList> feedLists;
-
 }

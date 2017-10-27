@@ -19,5 +19,5 @@ public class Stories {
     private int id;
     private String title;
     private String date;
-
+    private List<Images> images;
 }
