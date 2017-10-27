@@ -9,7 +9,5 @@ import org.litepal.crud.DataSupport;
 
 public class ZhiHuDailyBean extends DataSupport{
 
-    private int id;
-    private String imageBody;
-    private String contentBody;
+
 }

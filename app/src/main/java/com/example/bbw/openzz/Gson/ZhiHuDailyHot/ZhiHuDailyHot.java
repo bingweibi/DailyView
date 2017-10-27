@@ -15,7 +15,4 @@ public class ZhiHuDailyHot {
         return recentList;
     }
 
-    public void setRecentList(List<Recent> recentList) {
-        this.recentList = recentList;
-    }
 }

@@ -18,24 +18,4 @@ public class ZhiHuDailyFreeTalk {
     public String getTimestamp() {
         return timestamp;
     }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Stories> getStoriesList() {
-        return storiesList;
-    }
-
-    public void setStoriesList(List<Stories> storiesList) {
-        this.storiesList = storiesList;
-    }
 }

@@ -15,20 +15,4 @@ public class ZhiHuDailyLatest {
 
     @SerializedName("top_stories")
     private List<TopStories> topStoriesList;
-
-    public List<Stories> getStoriesList() {
-        return storiesList;
-    }
-
-    public void setStoriesList(List<Stories> storiesList) {
-        this.storiesList = storiesList;
-    }
-
-    public List<TopStories> getTopStoriesList() {
-        return topStoriesList;
-    }
-
-    public void setTopStoriesList(List<TopStories> topStoriesList) {
-        this.topStoriesList = topStoriesList;
-    }
 }

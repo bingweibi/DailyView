@@ -17,16 +17,4 @@ public class ZhiHuDailyBefore {
     public String getDate() {
         return date;
     }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public List<Stories> getStoriesList() {
-        return storiesList;
-    }
-
-    public void setStoriesList(List<Stories> storiesList) {
-        this.storiesList = storiesList;
-    }
 }
