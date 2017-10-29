@@ -1,8 +1,6 @@
 package com.example.bbw.openzz.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +17,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bbw.openzz.Gson.ZhiHuDailyLatest.Stories;
 import com.example.bbw.openzz.Gson.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.adapter.FragmentAdapter;
@@ -28,12 +25,9 @@ import com.example.bbw.openzz.fragmentTab.FragmentOneTab;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
 
-import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.prefs.PreferenceChangeEvent;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -191,8 +185,8 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
             public void onResponse(Call call, Response response) throws IOException {
 
 //                try {
-//                    final String responseText = response.body().toString();
-                    //final ZhiHuDailyLatest storiesList = ResponseHandleUtility.handleZhiHuDailyResponse(responseText);
+                    final String responseText = response.body().toString();
+                    final List<ZhiHuDailyLatest.Stories> storiesList = ResponseHandleUtility.handleZhuHuDailyLatest(responseText);
 //                    getActivity().runOnUiThread(new Runnable() {
 //                        @Override
 //                        public void run() {

@@ -1,6 +1,6 @@
 package com.example.bbw.openzz.Gson.ZhiHuDailyFreeTalk;
 
-import com.example.bbw.openzz.Gson.ZhiHuDailyLatest.Stories;
+import com.example.bbw.openzz.Gson.ZhiHuDailyLatest.ZhiHuDailyLatest;
 
 import java.util.List;
 
@@ -11,11 +11,13 @@ import java.util.List;
 
 public class ZhiHuDailyFreeTalk {
 
-    private String timestamp;
-    private String name;
-    private List<Stories> storiesList;
+    private List<ZhiHuDailyLatest.Stories> storiesList;
 
-    public String getTimestamp() {
-        return timestamp;
+    public List<ZhiHuDailyLatest.Stories> getStoriesList() {
+        return storiesList;
+    }
+
+    public void setStoriesList(List<ZhiHuDailyLatest.Stories> storiesList) {
+        this.storiesList = storiesList;
     }
 }
