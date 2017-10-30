@@ -5,5 +5,6 @@ package com.example.bbw.openzz.util;
  * @author bbw
  */
 
-public class ImageUtil {
+public class ImageLoadUtil {
+
 }

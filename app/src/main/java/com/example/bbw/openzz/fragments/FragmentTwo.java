@@ -78,11 +78,11 @@ public class FragmentTwo extends Fragment implements ViewPager.OnPageChangeListe
     private void initView( ) {
         List<FragmentTab> fragmentTabs = FragmentOneTab.getSelected();
         for(int i = 0; i< fragmentTabs.size(); i++){
-            FragmentsTabView mFragmentsTabView = new FragmentsTabView();
+            FragmentsContent mFragmentsContent = new FragmentsContent();
             Bundle bundle = new Bundle();
             bundle.putString("name", fragmentTabs.get(i).getName());
-            mFragmentsTabView.setArguments(bundle);
-            fragmentList.add(mFragmentsTabView);
+            mFragmentsContent.setArguments(bundle);
+            fragmentList.add(mFragmentsContent);
         }
 
         //设置viewPager适配器

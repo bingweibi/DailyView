@@ -5,24 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/fragmentContent_CardView"
+    <LinearLayout
+        android:id="@+id/fragment_contentLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="#fff"
-        app:cardCornerRadius="10dp"
-        app:contentPadding="5dp">
-        <TextView
-            android:id="@+id/fragmentContent_CardViewText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"/>
-        <ImageView
-            android:id="@+id/fragmentContent_CardViewImage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
-    </android.support.v7.widget.CardView>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--<android.support.v7.widget.CardView-->
+            <!--android:id="@+id/fragmentContent_CardView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="10dp"-->
+            <!--app:cardBackgroundColor="#fff"-->
+            <!--app:cardCornerRadius="10dp"-->
+            <!--app:contentPadding="5dp">-->
+            <!--<ImageView-->
+                <!--android:id="@+id/fragmentContent_CardViewImage"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"/>-->
+            <!--<TextView-->
+                <!--android:id="@+id/fragmentContent_CardViewText"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="3"/>-->
+        <!--</android.support.v7.widget.CardView>-->
+    </LinearLayout>
+
 
 </LinearLayout>

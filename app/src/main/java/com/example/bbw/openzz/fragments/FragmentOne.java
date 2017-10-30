@@ -19,7 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bbw.openzz.Model.ZhiHuDailyLatest.StoryBean;
+import com.bumptech.glide.Glide;
 import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.adapter.FragmentAdapter;
@@ -72,9 +72,6 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
             mRadioGroup = mView.findViewById(R.id.fragment_RadioGroup);
             mViewPager = mView.findViewById(R.id.fragment_ViewPager);
             mHorizontalScrollView = mView.findViewById(R.id.fragment_HorizontalScrollView);
-            mCardView = mView.findViewById(R.id.fragmentContent_CardView);
-            mTextView = mView.findViewById(R.id.fragmentContent_CardViewText);
-            mImageView = mView.findViewById(R.id.fragmentContent_CardViewImage);
             //设置RadioGroup点击事件
             mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -108,11 +105,8 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
     private void initView( ) {
         List<FragmentTab> fragmentTabs = FragmentOneTab.getSelected();
         for(int i = 0; i< fragmentTabs.size(); i++){
-            FragmentsTabView mFragmentsTabView = new FragmentsTabView();
-            Bundle bundle = new Bundle();
-            bundle.putString("name", fragmentTabs.get(i).getName());
-            mFragmentsTabView.setArguments(bundle);
-            fragmentList.add(mFragmentsTabView);
+            FragmentsContent mFragmentsContent = new FragmentsContent();
+            fragmentList.add(mFragmentsContent);
         }
 
         //设置viewPager适配器
@@ -195,40 +189,34 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                try {
-                    final String responseText = response.body().string();
-                    final StoryBean storiesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseText);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (storiesList !=null){
-                                //先进行缓存
-                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-                                editor.putString("stories",responseText);
-                                editor.apply();
-                                //显示图片和简要内容
-                                showStoriesInfo(storiesList);
-                            }else {
-                                Toast.makeText(getActivity(),"获取失败",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                final String responseText = response.body().string();
+                Bundle bundle = new Bundle();
+                bundle.putString("story", responseText);
+                new FragmentsContent().setArguments(bundle);
             }
         });
-
     }
 
     /**
      * 显示内容和图片
      */
-    private void showStoriesInfo(StoryBean storiesList) {
-
-
-
-    }
+//    private void showStoriesInfo(List<ZhiHuDailyLatest.StoryBean> storiesList) {
+//
+//        mViewPager.removeAllViews();
+//        for (int i=0;i<storiesList.size();i++){
+//            mCardView = new CardView(getContext());
+//            mTextView = new TextView(getContext());
+//            mImageView = new ImageView(getContext());
+//            mTextView.setText(storiesList.get(i).getTitle());
+//            mCardView.addView(mTextView);
+//            Glide.with(getActivity())
+//                    .load(storiesList.get(i).getImages().get(0))
+//                    .thumbnail(0.2f)
+//                    .into(mImageView);
+//            mCardView.addView(mImageView);
+//            mViewPager.addView(mCardView);
+//        }
+//    }
 
     /**
      * 页面跳转切换头部偏移设置
