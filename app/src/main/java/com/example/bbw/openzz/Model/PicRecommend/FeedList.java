@@ -1,4 +1,4 @@
-package com.example.bbw.openzz.Gson.PicRecommend;
+package com.example.bbw.openzz.Model.PicRecommend;
 
 import com.google.gson.annotations.SerializedName;
 

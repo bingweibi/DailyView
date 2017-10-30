@@ -1,4 +1,4 @@
-package com.example.bbw.openzz.Gson.GuokrScience;
+package com.example.bbw.openzz.Model.GuokrScience;
 
 import com.google.gson.annotations.SerializedName;
 

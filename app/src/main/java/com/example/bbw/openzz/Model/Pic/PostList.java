@@ -1,4 +1,4 @@
-package com.example.bbw.openzz.Gson.Pic;
+package com.example.bbw.openzz.Model.Pic;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,6 +1,8 @@
 package com.example.bbw.openzz.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,13 +19,16 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bbw.openzz.Gson.ZhiHuDailyLatest.ZhiHuDailyLatest;
+import com.example.bbw.openzz.Model.ZhiHuDailyLatest.StoryBean;
+import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.adapter.FragmentAdapter;
 import com.example.bbw.openzz.fragmentTab.FragmentTab;
 import com.example.bbw.openzz.fragmentTab.FragmentOneTab;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,6 +87,7 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
             initTab(inflater);
             //初始化viewPager
             initView();
+            requestMessage(daily_url);
         }
 
         /**
@@ -178,33 +184,38 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
         HttpUntil.sendOkHttpRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(getActivity(),"请求内容失败",Toast.LENGTH_SHORT).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(),"请求内容失败",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-//                try {
-                    final String responseText = response.body().toString();
-                    final List<ZhiHuDailyLatest.Stories> storiesList = ResponseHandleUtility.handleZhuHuDailyLatest(responseText);
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (storiesList !=null){
-//                                //先进行缓存
-//                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-//                                editor.putString("stories",responseText);
-//                                editor.apply();
-//                                //显示图片和简要内容
-//                                showStoriesInfo(storiesList);
-//                            }else {
-//                                Toast.makeText(getActivity(),"获取失败",Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    final String responseText = response.body().string();
+                    final StoryBean storiesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseText);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (storiesList !=null){
+                                //先进行缓存
+                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                                editor.putString("stories",responseText);
+                                editor.apply();
+                                //显示图片和简要内容
+                                showStoriesInfo(storiesList);
+                            }else {
+                                Toast.makeText(getActivity(),"获取失败",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -213,7 +224,9 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
     /**
      * 显示内容和图片
      */
-    private void showStoriesInfo(ZhiHuDailyLatest storiesList) {
+    private void showStoriesInfo(StoryBean storiesList) {
+
+
 
     }
 
