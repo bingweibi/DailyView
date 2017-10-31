@@ -1,8 +1,6 @@
 package com.example.bbw.openzz.fragments;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,26 +15,14 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.adapter.FragmentAdapter;
 import com.example.bbw.openzz.fragmentTab.FragmentTab;
 import com.example.bbw.openzz.fragmentTab.FragmentOneTab;
-import com.example.bbw.openzz.util.HttpUntil;
-import com.example.bbw.openzz.util.ResponseHandleUtility;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_freeTalk_url;
@@ -84,7 +70,7 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
             initTab(inflater);
             //初始化viewPager
             initView();
-            requestMessage(daily_url);
+            new FragmentsContent().requestMessage(daily_url);
         }
 
         /**
@@ -166,57 +152,8 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
         }else{
             url = daily_old_url;
         }
-        requestMessage(url);
+        new FragmentsContent().requestMessage(url);
     }
-
-    /**
-     * 显示返回的内容
-     * @param url
-     */
-    private void requestMessage(String url) {
-
-        HttpUntil.sendOkHttpRequest(url, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(),"请求内容失败",Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                final String responseText = response.body().string();
-                Bundle bundle = new Bundle();
-                bundle.putString("story", responseText);
-                new FragmentsContent().setArguments(bundle);
-            }
-        });
-    }
-
-    /**
-     * 显示内容和图片
-     */
-//    private void showStoriesInfo(List<ZhiHuDailyLatest.StoryBean> storiesList) {
-//
-//        mViewPager.removeAllViews();
-//        for (int i=0;i<storiesList.size();i++){
-//            mCardView = new CardView(getContext());
-//            mTextView = new TextView(getContext());
-//            mImageView = new ImageView(getContext());
-//            mTextView.setText(storiesList.get(i).getTitle());
-//            mCardView.addView(mTextView);
-//            Glide.with(getActivity())
-//                    .load(storiesList.get(i).getImages().get(0))
-//                    .thumbnail(0.2f)
-//                    .into(mImageView);
-//            mCardView.addView(mImageView);
-//            mViewPager.addView(mCardView);
-//        }
-//    }
 
     /**
      * 页面跳转切换头部偏移设置
