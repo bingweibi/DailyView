@@ -47,7 +47,7 @@ public class FragmentsContent extends Fragment{
     private CardView mCardView;
     private ImageView mImageView;
     private TextView mTextView;
-    private LinearLayout mLinearLayoutParents;
+    private LinearLayout mCardViewLinearLayout;
     private LinearLayout mLinearLayout;
     private List<ZhiHuDailyLatest.StoryBean> storiesList;
 
@@ -63,7 +63,6 @@ public class FragmentsContent extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_content,container,false);
-        mLinearLayoutParents = view.findViewById(R.id.fragment_contentParents);
         mLinearLayout = view.findViewById(R.id.fragment_contentLayout);
         return view;
     }
@@ -107,26 +106,29 @@ public class FragmentsContent extends Fragment{
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-//                    ViewGroup parent = (ViewGroup) mCardView.getParent();
-//                    if (parent != null){
-//                        parent.removeAllViews();
-//                    }
                     for (int i=0;i<storiesList.size();i++){
-//                        mCardView = new CardView(getContext());
-//                        mCardView.setCardBackgroundColor(Color.BLUE);
+                        mCardView = new CardView(getContext());
+                        mCardView.setUseCompatPadding(true);
+                        mCardView.setCardElevation(20);
+                        mCardView.setRadius(15);
+                        mCardView.setClickable(true);
+                        mCardViewLinearLayout = new LinearLayout(getContext());
+                        mCardViewLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
                         mTextView = new TextView(getContext());
                         mImageView = new ImageView(getContext());
-                        mTextView.setTextSize(18);
-                        mImageView.setLayoutParams(new LinearLayout.LayoutParams(250,250));
+                        mImageView.setPadding(15,20,0,20);
+                        mTextView.setTextSize(16);
+                        mTextView.setPadding(50,60,20,60);
+                        mImageView.setLayoutParams(new LinearLayout.LayoutParams(280,280));
                         mTextView.setText(storiesList.get(i).getTitle());
                         Glide.with(getActivity())
                                 .load(storiesList.get(i).getImages().get(0))
                                 .apply(new RequestOptions().transforms(new CenterCrop(),new RoundedCorners(2)))
                                 .into(mImageView);
-//                        mCardView.addView(mTextView);
-//                        mCardView.addView(mImageView);
-                        mLinearLayout.addView(mTextView);
-                        mLinearLayout.addView(mImageView);
+                        mCardViewLinearLayout.addView(mImageView);
+                        mCardViewLinearLayout.addView(mTextView);
+                        mCardView.addView(mCardViewLinearLayout);
+                        mLinearLayout.addView(mCardView);
                     }
                 }
             });
