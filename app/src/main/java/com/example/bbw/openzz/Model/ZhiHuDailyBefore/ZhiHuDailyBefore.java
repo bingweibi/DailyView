@@ -1,6 +1,5 @@
 package com.example.bbw.openzz.Model.ZhiHuDailyBefore;
 
-import com.example.bbw.openzz.Model.ZhiHuDailyLatest.StoryBean;
 import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import java.util.List;
 public class ZhiHuDailyBefore {
 
     private String date;
-    private ArrayList<StoryBean> storiesList;
+    private List<ZhiHuDailyLatest.StoryBean> storiesList;
 
     public String getDate() {
         return date;
@@ -24,11 +23,11 @@ public class ZhiHuDailyBefore {
         this.date = date;
     }
 
-    public ArrayList<StoryBean> getStoriesList() {
+    public List<ZhiHuDailyLatest.StoryBean> getStoriesList() {
         return storiesList;
     }
 
-    public void setStoriesList(ArrayList<StoryBean> storiesList) {
+    public void setStoriesList(ArrayList<ZhiHuDailyLatest.StoryBean> storiesList) {
         this.storiesList = storiesList;
     }
 }

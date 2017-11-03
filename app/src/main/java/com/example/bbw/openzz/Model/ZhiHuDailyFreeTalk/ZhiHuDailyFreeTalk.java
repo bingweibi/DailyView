@@ -1,8 +1,9 @@
 package com.example.bbw.openzz.Model.ZhiHuDailyFreeTalk;
 
-import com.example.bbw.openzz.Model.ZhiHuDailyLatest.StoryBean;
 
-import java.util.ArrayList;
+import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
+
+import java.util.List;
 
 /**
  * Created by bbw on 2017/10/27.
@@ -11,13 +12,13 @@ import java.util.ArrayList;
 
 public class ZhiHuDailyFreeTalk {
 
-    private ArrayList<StoryBean> storiesList;
+    private List<ZhiHuDailyLatest.StoryBean> storiesList;
 
-    public ArrayList<StoryBean> getStoriesList() {
+    public List<ZhiHuDailyLatest.StoryBean> getStoriesList() {
         return storiesList;
     }
 
-    public void setStoriesList(ArrayList<StoryBean> storiesList) {
+    public void setStoriesList(List<ZhiHuDailyLatest.StoryBean> storiesList) {
         this.storiesList = storiesList;
     }
 }

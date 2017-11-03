@@ -12,17 +12,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.bbw.openzz.Model.ZhiHuDailyHot.ZhiHuDailyHot;
+import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.adapter.FragmentAdapter;
 import com.example.bbw.openzz.fragmentTab.FragmentTab;
 import com.example.bbw.openzz.fragmentTab.FragmentOneTab;
+import com.example.bbw.openzz.util.HttpUntil;
+import com.example.bbw.openzz.util.ResponseHandleUtility;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_freeTalk_url;
@@ -44,17 +60,23 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
     private List<Fragment> fragmentList = new ArrayList<>();
     private FragmentAdapter mFragmentAdapter;
     private CardView mCardView;
-    private TextView mTextView;
     private ImageView mImageView;
+    private TextView mTextView;
+    private LinearLayout mCardViewLinearLayout;
+    private LinearLayout mLinearLayout;
+    private List<ZhiHuDailyLatest.StoryBean> storiesList;
+    private List<ZhiHuDailyHot.Recent> hotStoriesList;
+    private View fragmentContentParent;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         if (mView == null){
-
             //初始化view
             mView = inflater.inflate(R.layout.fragment,container,false);
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            fragmentContentParent = layoutInflater.inflate(R.layout.fragment_content,null);
             mRadioGroup = mView.findViewById(R.id.fragment_RadioGroup);
             mViewPager = mView.findViewById(R.id.fragment_ViewPager);
             mHorizontalScrollView = mView.findViewById(R.id.fragment_HorizontalScrollView);
@@ -70,7 +92,6 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
             initTab(inflater);
             //初始化viewPager
             initView();
-            new FragmentsContent().requestMessage(daily_url);
         }
 
         /**
@@ -89,6 +110,7 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
      * 初始化viewPager
      */
     private void initView( ) {
+
         List<FragmentTab> fragmentTabs = FragmentOneTab.getSelected();
         for(int i = 0; i< fragmentTabs.size(); i++){
             FragmentsContent mFragmentsContent = new FragmentsContent();
@@ -102,6 +124,7 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
         mViewPager.setOffscreenPageLimit(1);
         //设置默认
         mViewPager.setCurrentItem(0);
+        requestMessage(daily_url);
         mViewPager.addOnPageChangeListener(this);
     }
 
@@ -152,7 +175,7 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
         }else{
             url = daily_old_url;
         }
-        new FragmentsContent().requestMessage(url);
+        requestMessage(url);
     }
 
     /**
@@ -179,5 +202,115 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+
+
+    /**
+     * 显示返回的内容
+     * @param url
+     */
+    public void requestMessage(final String url) {
+
+        HttpUntil.sendOkHttpRequest(url, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                if (url.equals("https://news-at.zhihu.com/api/3/news/hot")){
+                    final String responseText = response.body().string();
+                    showHotStories(responseText);
+                }else{
+                    final String responseText = response.body().string();
+                    showStories(responseText);
+                }
+
+            }
+        });
+    }
+
+    private void showHotStories(String responseText) {
+
+        try {
+            hotStoriesList  = ResponseHandleUtility.handleZhiHuDailyHot(responseText);
+            if (getActivity() == null){
+                return;
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i=0;i<hotStoriesList.size();i++){
+                        mCardView = new CardView(getContext());
+                        mCardView.setUseCompatPadding(true);
+                        mCardView.setCardElevation(20);
+                        mCardView.setRadius(15);
+                        mCardView.setClickable(true);
+                        mCardViewLinearLayout = new LinearLayout(getContext());
+                        mCardViewLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                        mTextView = new TextView(getContext());
+                        mImageView = new ImageView(getContext());
+                        mImageView.setPadding(15,20,0,20);
+                        mTextView.setTextSize(16);
+                        mTextView.setPadding(50,60,20,60);
+                        mImageView.setLayoutParams(new LinearLayout.LayoutParams(280,280));
+                        mTextView.setText(storiesList.get(i).getTitle());
+                        Glide.with(getActivity())
+                                .load(storiesList.get(i).getImages().get(0))
+                                .apply(new RequestOptions().transforms(new CenterCrop(),new RoundedCorners(2)))
+                                .into(mImageView);
+                        mCardViewLinearLayout.addView(mImageView);
+                        mCardViewLinearLayout.addView(mTextView);
+                        mCardView.addView(mCardViewLinearLayout);
+                        mLinearLayout.addView(mCardView);
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showStories(String responseStories) {
+        try {
+            storiesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
+            if (getActivity() == null){
+                return;
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i=0;i<storiesList.size();i++){
+                        mCardView = new CardView(getContext());
+                        mCardView.setUseCompatPadding(true);
+                        mCardView.setCardElevation(20);
+                        mCardView.setRadius(15);
+                        mCardView.setClickable(true);
+                        mCardViewLinearLayout = new LinearLayout(getContext());
+                        mCardViewLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
+                        mTextView = new TextView(getContext());
+                        mImageView = new ImageView(getContext());
+                        mImageView.setPadding(15,20,0,20);
+                        mTextView.setTextSize(16);
+                        mTextView.setPadding(50,60,20,60);
+                        mImageView.setLayoutParams(new LinearLayout.LayoutParams(280,280));
+                        mTextView.setText(storiesList.get(i).getTitle());
+                        Glide.with(getActivity())
+                                .load(storiesList.get(i).getImages().get(0))
+                                .apply(new RequestOptions().transforms(new CenterCrop(),new RoundedCorners(2)))
+                                .into(mImageView);
+                        mCardViewLinearLayout.addView(mImageView);
+                        mCardViewLinearLayout.addView(mTextView);
+                        mCardView.addView(mCardViewLinearLayout);
+                        mLinearLayout.addView(mCardView);
+                    }
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
