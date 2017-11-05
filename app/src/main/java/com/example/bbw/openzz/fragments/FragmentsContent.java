@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.bbw.openzz.R;
 
+import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
+
 
 /**
  * Created by bbw on 2017/10/23.

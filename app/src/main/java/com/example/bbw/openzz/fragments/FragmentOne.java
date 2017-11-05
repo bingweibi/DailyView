@@ -75,8 +75,6 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
         if (mView == null){
             //初始化view
             mView = inflater.inflate(R.layout.fragment,container,false);
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            fragmentContentParent = layoutInflater.inflate(R.layout.fragment_content,null);
             mRadioGroup = mView.findViewById(R.id.fragment_RadioGroup);
             mViewPager = mView.findViewById(R.id.fragment_ViewPager);
             mHorizontalScrollView = mView.findViewById(R.id.fragment_HorizontalScrollView);
@@ -118,10 +116,10 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
         }
 
         //设置viewPager适配器
-        mFragmentAdapter = new FragmentAdapter(getActivity().getSupportFragmentManager(),fragmentList);
+        mFragmentAdapter = new FragmentAdapter(getChildFragmentManager(),fragmentList);
         mViewPager.setAdapter(mFragmentAdapter);
-        //两个viewPager切换不重新加载
-        mViewPager.setOffscreenPageLimit(1);
+        //不进行预加载
+        mViewPager.setOffscreenPageLimit(0);
         //设置默认
         mViewPager.setCurrentItem(0);
         requestMessage(daily_url);
@@ -204,8 +202,6 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
 
     }
 
-
-
     /**
      * 显示返回的内容
      * @param url
@@ -277,6 +273,9 @@ public class FragmentOne extends Fragment implements ViewPager.OnPageChangeListe
     private void showStories(String responseStories) {
         try {
             storiesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            fragmentContentParent = layoutInflater.inflate(R.layout.fragment_content,null);
+            mLinearLayout = fragmentContentParent.findViewById(R.id.fragment_contentLayout);
             if (getActivity() == null){
                 return;
             }
