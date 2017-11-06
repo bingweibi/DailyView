@@ -7,13 +7,18 @@ package com.example.bbw.openzz.util;
 
 public class Event {
 
-    private String responseMessage;
+    private String url;
 
-    public Event(String responseMessage) {
-        this.responseMessage = responseMessage;
+
+    public Event(String url) {
+        this.url = url;
     }
 
-    public String getResponseMessage() {
-        return responseMessage;
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

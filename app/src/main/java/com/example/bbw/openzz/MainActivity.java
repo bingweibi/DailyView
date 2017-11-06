@@ -4,69 +4,88 @@ package com.example.bbw.openzz;
  * @author bibingwei
  */
 
-import android.graphics.Color;
-import android.support.v4.app.FragmentTabHost;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TabHost;
-import android.widget.TabWidget;
-import android.widget.TextView;
 
-import com.example.bbw.openzz.tabRes.TabRes;
+import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements TabHost.OnTabChangeListener {
+import com.example.bbw.openzz.adapter.ViewPagerAdapter;
+import com.example.bbw.openzz.fragments.BaseFragment;
+import com.example.bbw.openzz.util.BottomNavigationViewHelper;
 
-    private FragmentTabHost mFragmentTabHost;
+public class MainActivity extends AppCompatActivity  {
+
+    private ViewPager mViewPager;
+    private MenuItem mMenuItem;
+    private BottomNavigationView mBottomNavigationView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFragmentTabHost = super.findViewById(android.R.id.tabhost);
-        mFragmentTabHost.setup(this,super.getSupportFragmentManager(),R.id.main_content);
-        mFragmentTabHost.getTabWidget().setDividerDrawable(null);
-        mFragmentTabHost.setOnTabChangedListener(this);
+        mViewPager = findViewById(R.id.fragment_ViewPager);
+        mBottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-        //初始化底部导航栏
-        initTab();
-    }
-
-    private void initTab() {
-
-        String[] tabs  = TabRes.getTabText();
-        for (int i=0;i<tabs.length;i++){
-            TabHost.TabSpec mTabSpec = mFragmentTabHost.newTabSpec(tabs[i]).setIndicator(getTabView(i));
-            mFragmentTabHost.addTab(mTabSpec,TabRes.getFragment()[i],null);
-            mFragmentTabHost.setTag(i);
-        }
-    }
-
-    private View getTabView(int index) {
-        View view = LayoutInflater.from(this).inflate(R.layout.tab_content,null);
-        ((TextView)view.findViewById(R.id.tab_content)).setText(TabRes.getTabText()[index]);
-        if (index == 0){
-            ((TextView)view.findViewById(R.id.tab_content)).setTextColor(Color.RED);
-        }
-        return view;
-    }
-
-    @Override
-    public void onTabChanged(String s) {
-        updateTab();
-    }
-
-    private void updateTab() {
-        TabWidget mTabWidget = mFragmentTabHost.getTabWidget();
-        for (int i=0;i<mTabWidget.getChildCount();i++){
-            View view = mTabWidget.getChildAt(i);
-            if (i == mFragmentTabHost.getCurrentTab()){
-                ((TextView)view.findViewById(R.id.tab_content)).setTextColor(Color.parseColor("#FFB6C1"));
-            }else {
-                ((TextView)view.findViewById(R.id.tab_content)).setTextColor(Color.BLACK);
+                switch (item.getItemId()) {
+                    case R.id.item_daily:
+                        mViewPager.setCurrentItem(0);
+                        break;
+                    case R.id.item_pic:
+                        mViewPager.setCurrentItem(1);
+                        break;
+                    case R.id.item_video:
+                        mViewPager.setCurrentItem(2);
+                        break;
+                    case R.id.item_about:
+                        mViewPager.setCurrentItem(3);
+                        break;
+                        default:
+                }
+                return false;
             }
-        }
+        });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(mMenuItem != null){
+                    mMenuItem.setChecked(false);
+                }else {
+                    mBottomNavigationView.getMenu().getItem(0).setChecked(false);
+                }
+                mMenuItem = mBottomNavigationView.getMenu().getItem(position);
+                mMenuItem.setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        setUpViewPager(mViewPager);
+    }
+
+    private void setUpViewPager(ViewPager mViewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(BaseFragment.newInstance("日报"));
+        adapter.addFragment(BaseFragment.newInstance("图虫"));
+        adapter.addFragment(BaseFragment.newInstance("白日梦"));
+        adapter.addFragment(BaseFragment.newInstance("关于"));
+        mViewPager.setAdapter(adapter);
+
     }
 }
