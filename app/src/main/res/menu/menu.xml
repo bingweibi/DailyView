@@ -3,14 +3,18 @@
 
     <item
         android:id="@+id/item_daily"
+        android:icon="@mipmap/ic_zhihu_gray"
         android:title="日报" />
     <item
         android:id="@+id/item_pic"
+        android:icon="@mipmap/ic_tuchong_gray"
         android:title="图虫" />
     <item
         android:id="@+id/item_video"
+        android:icon="@mipmap/ic_yixi_gray"
         android:title="白日梦" />
     <item
         android:id="@+id/item_about"
+        android:icon="@mipmap/ic_about_gray"
         android:title="关于"/>
 </menu>

@@ -1,10 +1,5 @@
 package com.example.bbw.openzz.util;
 
-import android.text.TextUtils;
-
-import com.example.bbw.openzz.Model.ZhiHuDailyBefore.ZhiHuDailyBefore;
-import com.example.bbw.openzz.Model.ZhiHuDailyFreeTalk.ZhiHuDailyFreeTalk;
-import com.example.bbw.openzz.Model.ZhiHuDailyHot.ZhiHuDailyHot;
 import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.google.gson.Gson;
 
