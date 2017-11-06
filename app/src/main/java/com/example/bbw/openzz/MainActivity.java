@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.example.bbw.openzz.adapter.ViewPagerAdapter;
 import com.example.bbw.openzz.fragments.BaseFragment;
+import com.example.bbw.openzz.fragments.FragmentOne;
 import com.example.bbw.openzz.util.BottomNavigationViewHelper;
 
 public class MainActivity extends AppCompatActivity  {
@@ -80,12 +81,12 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void setUpViewPager(ViewPager mViewPager) {
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(BaseFragment.newInstance("日报"));
+        adapter.addFragment(new FragmentOne());
         adapter.addFragment(BaseFragment.newInstance("图虫"));
         adapter.addFragment(BaseFragment.newInstance("白日梦"));
         adapter.addFragment(BaseFragment.newInstance("关于"));
         mViewPager.setAdapter(adapter);
-
     }
 }
