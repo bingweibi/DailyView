@@ -20,28 +20,16 @@ public class ZhiHuDailyLatest {
         this.storiesList = storiesList;
     }
 
-    public class StoryBean {
+    public static class StoryBean {
 
         private String title;
-        private List<String> images;
+        private String images;
         private int id;
-        private int type;
-        private String ga_prefix;
 
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String getGa_prefix() {
-            return ga_prefix;
-        }
-
-        public void setGa_prefix(String ga_prefix) {
-            this.ga_prefix = ga_prefix;
+        public StoryBean(String title, String images, int id) {
+            this.title = title;
+            this.images = images;
+            this.id = id;
         }
 
         public String getTitle() {
@@ -52,11 +40,11 @@ public class ZhiHuDailyLatest {
             this.title = title;
         }
 
-        public List<String> getImages() {
+        public String getImages() {
             return images;
         }
 
-        public void setImages(List<String> images) {
+        public void setImages(String images) {
             this.images = images;
         }
 

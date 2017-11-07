@@ -23,9 +23,16 @@ public class ResponseHandleUtility {
             JSONArray jsonArray = jsonObject.getJSONArray("stories");
             List<ZhiHuDailyLatest.StoryBean> storyBeansList = new ArrayList<>();
             for (int i=0;i<jsonArray.length();i++){
-                String element = jsonArray.get(i).toString();
-                ZhiHuDailyLatest.StoryBean storyBean = new Gson().fromJson(element,ZhiHuDailyLatest.StoryBean.class);
-                storyBeansList.add(storyBean);
+                JSONObject newsInJson = jsonArray.getJSONObject(i);
+                int id = newsInJson.optInt("id");
+                String title = newsInJson.optString("title");
+                String image = "";
+                if (newsInJson.has("images")) {
+                    image = (String) newsInJson.getJSONArray("images").get(0);
+
+                }
+                ZhiHuDailyLatest.StoryBean news = new ZhiHuDailyLatest.StoryBean(title,image,id);
+                storyBeansList.add(news);
             }
         return storyBeansList;
     }

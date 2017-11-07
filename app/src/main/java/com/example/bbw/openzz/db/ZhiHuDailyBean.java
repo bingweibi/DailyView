@@ -11,7 +11,15 @@ public class ZhiHuDailyBean extends DataSupport{
 
     private int id;
     private String imageUrl;
-    private String ContentUrl;
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public int getId() {
         return id;
@@ -29,11 +37,4 @@ public class ZhiHuDailyBean extends DataSupport{
         this.imageUrl = imageUrl;
     }
 
-    public String getContentUrl() {
-        return ContentUrl;
-    }
-
-    public void setContentUrl(String contentUrl) {
-        ContentUrl = contentUrl;
-    }
 }

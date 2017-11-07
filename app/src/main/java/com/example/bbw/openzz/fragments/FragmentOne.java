@@ -1,32 +1,25 @@
 package com.example.bbw.openzz.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.example.bbw.openzz.R;
-import com.example.bbw.openzz.activity.DailyDetail;
+import com.example.bbw.openzz.adapter.DailyAdapter;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
 
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
@@ -42,27 +35,28 @@ import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 public class FragmentOne extends Fragment {
 
-    private LinearLayout mLinearLayout;
-    private CardView mCardView;
-    private LinearLayout mCardLinearLayout;
-    private ImageView mImageView;
-    private TextView mTextView;
-    private List<ZhiHuDailyLatest.StoryBean> storiesList;
-    private int i;
+    private List<ZhiHuDailyLatest.StoryBean> responseStoriesList;
+    private List<ZhiHuDailyLatest.StoryBean> showStoriesList = new ArrayList<>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_base,null);
-        mLinearLayout = view.findViewById(R.id.fragment_content);
+
+        View mView = inflater.inflate(R.layout.fragment_base,container,false);
         requestMessage(daily_url);
-//        mCardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getContext(), DailyDetail.class);
-//            }
-//        });
-        return view;
+        RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        DailyAdapter dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
+        mRecyclerView.setAdapter(dailyAdapter);
+        return mView;
     }
 
     /**
@@ -81,47 +75,19 @@ public class FragmentOne extends Fragment {
             public void onResponse(Call call, Response response) throws IOException {
 
                 final String responseText = response.body().string();
-                showStories(responseText);
+                initStories(responseText);
             }
         });
     }
 
-    private void showStories(String responseStories) {
+    private void initStories(String responseStories) {
         try {
-            storiesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
-            if (getActivity() == null){
-                return;
+            responseStoriesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
+            for(int i=0;i<responseStoriesList.size();i++){
+                ZhiHuDailyLatest.StoryBean stories =
+                        new ZhiHuDailyLatest.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());
+                showStoriesList.add(stories);
             }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (i=0;i<storiesList.size();i++){
-                        mCardView = new CardView(getContext());
-                        mCardView.setId(i);
-                        mCardView.setUseCompatPadding(true);
-                        mCardView.setCardElevation(20);
-                        mCardView.setRadius(15);
-                        mCardView.setClickable(true);
-                        mCardLinearLayout = new LinearLayout(getContext());
-                        mCardLinearLayout.setOrientation(LinearLayout.HORIZONTAL);
-                        mTextView = new TextView(getContext());
-                        mImageView = new ImageView(getContext());
-                        mImageView.setPadding(15,20,0,20);
-                        mTextView.setTextSize(16);
-                        mTextView.setPadding(50,60,20,60);
-                        mImageView.setLayoutParams(new LinearLayout.LayoutParams(280,280));
-                        mTextView.setText(storiesList.get(i).getTitle());
-                        Glide.with(getActivity())
-                                .load(storiesList.get(i).getImages().get(0))
-                                .apply(new RequestOptions().transforms(new CenterCrop(),new RoundedCorners(2)))
-                                .into(mImageView);
-                        mCardLinearLayout.addView(mImageView);
-                        mCardLinearLayout.addView(mTextView);
-                        mCardView.addView(mCardLinearLayout);
-                        mLinearLayout.addView(mCardView);
-                    }
-                }
-            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
