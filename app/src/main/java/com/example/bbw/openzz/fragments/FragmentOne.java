@@ -26,6 +26,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_old_url;
 import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 /**
@@ -49,13 +50,14 @@ public class FragmentOne extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View mView = inflater.inflate(R.layout.fragment_base,container,false);
-        requestMessage(daily_url);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        requestMessage(daily_url);
         DailyAdapter dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
         mRecyclerView.setAdapter(dailyAdapter);
+        dailyAdapter.notifyDataSetChanged();
         return mView;
     }
 

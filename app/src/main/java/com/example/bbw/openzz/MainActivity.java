@@ -18,6 +18,8 @@ import com.example.bbw.openzz.fragments.BaseFragment;
 import com.example.bbw.openzz.fragments.FragmentOne;
 import com.example.bbw.openzz.util.BottomNavigationViewHelper;
 
+import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
+
 public class MainActivity extends AppCompatActivity  {
 
     private ViewPager mViewPager;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity  {
         mViewPager = findViewById(R.id.fragment_ViewPager);
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
-
         setUpViewPager(mViewPager);
     }
 
