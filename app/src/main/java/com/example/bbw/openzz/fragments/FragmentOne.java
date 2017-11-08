@@ -1,5 +1,6 @@
 package com.example.bbw.openzz.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
 import com.example.bbw.openzz.R;
+import com.example.bbw.openzz.activity.DailyDetail;
 import com.example.bbw.openzz.adapter.DailyAdapter;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
@@ -62,6 +64,13 @@ public class FragmentOne extends Fragment {
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         DailyAdapter dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
         mRecyclerView.setAdapter(dailyAdapter);
+        dailyAdapter.setClickListener(new DailyAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent intent = new Intent(getContext(), DailyDetail.class);
+                startActivity(intent);
+            }
+        });
         dailyAdapter.notifyDataSetChanged();
         return mView;
     }

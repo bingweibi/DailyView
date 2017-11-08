@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,8 +30,17 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
 
     private List<ZhiHuDailyLatest.StoryBean> mDailyList;
     private Context mContext;
+    private OnItemClickListener clickListener;
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    public void setClickListener(OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+
+    public static interface OnItemClickListener{
+        void onClick(View view,int position);
+    }
+
+     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView dailyImage;
         TextView dailyTitle;
@@ -40,6 +51,14 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
             dailyView = itemView;
             dailyImage = itemView.findViewById(R.id.daily_image);
             dailyTitle = itemView.findViewById(R.id.daily_title);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view){
+            if (clickListener != null) {
+                clickListener.onClick(itemView, getAdapterPosition());
+            }
         }
     }
 
