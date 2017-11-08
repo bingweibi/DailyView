@@ -3,6 +3,7 @@ package com.example.bbw.openzz.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
 
     @Override
     public DailyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.daily_item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
         return holder;
@@ -64,6 +66,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
+
         return mDailyList.size();
     }
 }

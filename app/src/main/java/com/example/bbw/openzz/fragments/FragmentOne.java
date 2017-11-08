@@ -42,7 +42,7 @@ public class FragmentOne extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        requestMessage(daily_url);
     }
 
     @Nullable
@@ -51,10 +51,15 @@ public class FragmentOne extends Fragment {
 
         View mView = inflater.inflate(R.layout.fragment_base,container,false);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        requestMessage(daily_url);
         DailyAdapter dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
         mRecyclerView.setAdapter(dailyAdapter);
         dailyAdapter.notifyDataSetChanged();
@@ -85,6 +90,7 @@ public class FragmentOne extends Fragment {
     private void initStories(String responseStories) {
         try {
             responseStoriesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
+            showStoriesList.clear();
             for(int i=0;i<responseStoriesList.size();i++){
                 ZhiHuDailyLatest.StoryBean stories =
                         new ZhiHuDailyLatest.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());
