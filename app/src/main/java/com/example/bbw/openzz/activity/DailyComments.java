@@ -3,6 +3,8 @@ package com.example.bbw.openzz.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -26,12 +28,17 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+/**
+ * @author bbw
+ */
 public class DailyComments extends AppCompatActivity {
 
     private int storyId;
     private List<StoryComments.CommentBean> storyComments;
     private String storyShortCommentsAddress;
     private ListView mListView;
+    private Toolbar mToolbar;
+    private TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +48,21 @@ public class DailyComments extends AppCompatActivity {
         Intent intent = getIntent();
         storyId = intent.getIntExtra("storyID",0);
         storyComments = new ArrayList<>();
+        mToolbar = findViewById(R.id.commentsToolbar);
+        mToolbar.setTitle("");
+        mToolbar.setNavigationIcon(R.drawable.back);
+        setSupportActionBar(mToolbar);
+        mTextView = findViewById(R.id.toolbarText);
+        mTextView.setText("评论");
         mListView = findViewById(R.id.listView);
         storyShortCommentsAddress = "https://news-at.zhihu.com/api/4/story/" + storyId +"/short-comments";
+
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DailyComments.this.finish();
+            }
+        });
 
         HttpUntil.sendOkHttpRequest(storyShortCommentsAddress, new Callback() {
             @Override

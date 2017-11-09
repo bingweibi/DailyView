@@ -50,7 +50,7 @@ public class FragmentOne extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View mView = inflater.inflate(R.layout.fragment_base,container,false);
+        View mView = inflater.inflate(R.layout.fragment_one,container,false);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
         try {

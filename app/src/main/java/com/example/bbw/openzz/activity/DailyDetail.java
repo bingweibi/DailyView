@@ -49,10 +49,8 @@ public class DailyDetail extends AppCompatActivity {
         mWebView = findViewById(R.id.contentText);
         mWebView.setDrawingCacheEnabled(true);
         mToolBar = findViewById(R.id.toolBar);
-        mToolBar.setTitleTextColor(Color.GRAY);
         mToolBar.setNavigationIcon(R.drawable.back);
         mFloatingActionButton = findViewById(R.id.comments);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         Intent intent = getIntent();
         storyId = intent.getIntExtra("storyId",0);
@@ -93,6 +91,12 @@ public class DailyDetail extends AppCompatActivity {
                     setSupportActionBar(mToolBar);
                     String htmlData = HtmlUtil.createHtmlData(storyDetail);
                     mWebView.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
+                    mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
                 }
             });
         } catch (JSONException e) {

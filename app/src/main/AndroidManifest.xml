@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DailyDetail" />
-        <activity android:name=".activity.DailyComments"></activity>
+        <activity android:name=".activity.DailyComments"/>
     </application>
 
 </manifest>
