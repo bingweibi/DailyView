@@ -1,22 +1,15 @@
 package com.example.bbw.openzz.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
+import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
 import com.example.bbw.openzz.R;
 
 import java.util.List;
@@ -28,7 +21,7 @@ import java.util.List;
 
 public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
 
-    private List<ZhiHuDailyLatest.StoryBean> mDailyList;
+    private List<ZhiHuDaily.StoryBean> mDailyList;
     private Context mContext;
     private OnItemClickListener clickListener;
 
@@ -62,7 +55,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
         }
     }
 
-    public DailyAdapter(Context mContext,List<ZhiHuDailyLatest.StoryBean> dailyList){
+    public DailyAdapter(Context mContext,List<ZhiHuDaily.StoryBean> dailyList){
         mDailyList = dailyList;
         this.mContext = mContext;
     }
@@ -78,7 +71,7 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(DailyAdapter.ViewHolder holder, int position) {
 
-        ZhiHuDailyLatest.StoryBean daily = mDailyList.get(position);
+        ZhiHuDaily.StoryBean daily = mDailyList.get(position);
         Glide.with(mContext).load(daily.getImages()).into(holder.dailyImage);
         holder.dailyTitle.setText(daily.getTitle());
     }

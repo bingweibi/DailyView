@@ -1,6 +1,7 @@
 package com.example.bbw.openzz.util;
 
-import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
+import com.example.bbw.openzz.Model.ZhiHuDaily.StoryDetail;
+import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -17,11 +18,11 @@ import java.util.List;
 
 public class ResponseHandleUtility {
 
-    public static List<ZhiHuDailyLatest.StoryBean> handleZhuHuDailyLatest(String responseText) throws JSONException {
+    public static List<ZhiHuDaily.StoryBean> handleZhuHuDailyLatest(String responseText) throws JSONException {
 
             JSONObject jsonObject = new JSONObject(responseText);
             JSONArray jsonArray = jsonObject.getJSONArray("stories");
-            List<ZhiHuDailyLatest.StoryBean> storyBeansList = new ArrayList<>();
+            List<ZhiHuDaily.StoryBean> storyBeansList = new ArrayList<>();
             for (int i=0;i<jsonArray.length();i++){
                 JSONObject newsInJson = jsonArray.getJSONObject(i);
                 int id = newsInJson.optInt("id");
@@ -31,10 +32,16 @@ public class ResponseHandleUtility {
                     image = (String) newsInJson.getJSONArray("images").get(0);
 
                 }
-                ZhiHuDailyLatest.StoryBean news = new ZhiHuDailyLatest.StoryBean(title,image,id);
+                ZhiHuDaily.StoryBean news = new ZhiHuDaily.StoryBean(title,image,id);
                 storyBeansList.add(news);
             }
         return storyBeansList;
     }
 
+    public static StoryDetail handleStoryDetail(String responseText) throws JSONException {
+
+        Gson gson = new Gson();
+        StoryDetail storyDetail = gson.fromJson(responseText,StoryDetail.class);
+        return storyDetail;
+    }
 }

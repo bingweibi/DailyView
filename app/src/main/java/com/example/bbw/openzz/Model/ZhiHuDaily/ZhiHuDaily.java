@@ -1,4 +1,4 @@
-package com.example.bbw.openzz.Model.ZhiHuDailyLatest;
+package com.example.bbw.openzz.Model.ZhiHuDaily;
 
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
  * @author bbw
  */
 
-public class ZhiHuDailyLatest {
+public class ZhiHuDaily {
 
     private List<StoryBean> storiesList;
 

@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.bbw.openzz.Model.ZhiHuDailyLatest.ZhiHuDailyLatest;
+import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.activity.DailyDetail;
 import com.example.bbw.openzz.adapter.DailyAdapter;
@@ -28,7 +28,6 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_old_url;
 import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 /**
@@ -38,8 +37,8 @@ import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 public class FragmentOne extends Fragment {
 
-    private List<ZhiHuDailyLatest.StoryBean> responseStoriesList;
-    private List<ZhiHuDailyLatest.StoryBean> showStoriesList = new ArrayList<>();
+    private List<ZhiHuDaily.StoryBean> responseStoriesList;
+    private List<ZhiHuDaily.StoryBean> showStoriesList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +67,7 @@ public class FragmentOne extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getContext(), DailyDetail.class);
+                intent.putExtra("storyId",showStoriesList.get(position).getId());
                 startActivity(intent);
             }
         });
@@ -101,8 +101,8 @@ public class FragmentOne extends Fragment {
             responseStoriesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
             showStoriesList.clear();
             for(int i=0;i<responseStoriesList.size();i++){
-                ZhiHuDailyLatest.StoryBean stories =
-                        new ZhiHuDailyLatest.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());
+                ZhiHuDaily.StoryBean stories =
+                        new ZhiHuDaily.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());
                 showStoriesList.add(stories);
             }
         } catch (JSONException e) {
