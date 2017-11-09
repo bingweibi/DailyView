@@ -1,5 +1,6 @@
 package com.example.bbw.openzz.util;
 
+import com.example.bbw.openzz.Model.ZhiHuDaily.StoryComments;
 import com.example.bbw.openzz.Model.ZhiHuDaily.StoryDetail;
 import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
 import com.google.gson.Gson;
@@ -43,5 +44,21 @@ public class ResponseHandleUtility {
         Gson gson = new Gson();
         StoryDetail storyDetail = gson.fromJson(responseText,StoryDetail.class);
         return storyDetail;
+    }
+
+    public static List<StoryComments.CommentBean> handStoryComments(String responseText)throws JSONException{
+
+        JSONObject jsonObject = new JSONObject(responseText);
+        JSONArray jsonArray = jsonObject.getJSONArray("comments");
+        List<StoryComments.CommentBean> storyCommentsList = new ArrayList<>();
+        for (int i=0;i<jsonArray.length();i++){
+            JSONObject newsInJson = jsonArray.getJSONObject(i);
+            String author = newsInJson.optString("author");
+            String content = newsInJson.optString("content");
+            String avatar = newsInJson.optString("avatar");
+            StoryComments.CommentBean news = new StoryComments.CommentBean(author,content,avatar);
+            storyCommentsList.add(news);
+        }
+        return storyCommentsList;
     }
 }

@@ -9,6 +9,8 @@ public class ZhiHuDailyApi {
 
     /**
      * http://news-at.zhihu.com/api/4/news/9654090
+     * https://news-at.zhihu.com/api/4/story/8997528/long-comments
+     * https://news-at.zhihu.com/api/4/story/8997528/short-comments
      */
     public static String daily_url = "http://news-at.zhihu.com/api/4/news/latest";
     /**

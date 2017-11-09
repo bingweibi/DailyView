@@ -7,6 +7,8 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:textColor="#2EC4B6"
+        android:textSize="30sp"
         />
 
 </LinearLayout>

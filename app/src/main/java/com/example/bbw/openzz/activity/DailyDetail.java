@@ -1,12 +1,16 @@
 package com.example.bbw.openzz.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bbw.openzz.Model.ZhiHuDaily.StoryDetail;
@@ -34,6 +38,7 @@ public class DailyDetail extends AppCompatActivity {
     private ImageView mImageView;
     private Toolbar mToolBar;
     private WebView mWebView;
+    private FloatingActionButton mFloatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +49,10 @@ public class DailyDetail extends AppCompatActivity {
         mWebView = findViewById(R.id.contentText);
         mWebView.setDrawingCacheEnabled(true);
         mToolBar = findViewById(R.id.toolBar);
+        mToolBar.setTitleTextColor(Color.GRAY);
         mToolBar.setNavigationIcon(R.drawable.back);
-        setSupportActionBar(mToolBar);
+        mFloatingActionButton = findViewById(R.id.comments);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         Intent intent = getIntent();
         storyId = intent.getIntExtra("storyId",0);
@@ -54,13 +61,22 @@ public class DailyDetail extends AppCompatActivity {
         HttpUntil.sendOkHttpRequest(storyAddress, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                Toast.makeText(getApplicationContext(),"404...",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
                 showStoryDetail(responseText);
+            }
+        });
+
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(getApplicationContext(),DailyComments.class);
+                intent1.putExtra("storyID",storyId);
+                startActivity(intent1);
             }
         });
     }
@@ -74,6 +90,7 @@ public class DailyDetail extends AppCompatActivity {
                 public void run() {
                     Glide.with(getApplicationContext()).load(storyDetail.getImage()).into(mImageView);
                     mToolBar.setTitle(storyDetail.getTitle());
+                    setSupportActionBar(mToolBar);
                     String htmlData = HtmlUtil.createHtmlData(storyDetail);
                     mWebView.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
                 }
