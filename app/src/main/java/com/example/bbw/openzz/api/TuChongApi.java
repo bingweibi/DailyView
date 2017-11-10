@@ -1,0 +1,18 @@
+package com.example.bbw.openzz.api;
+
+/**
+ * Created by bbw on 2017/10/20.
+ * @author bibingwei
+ */
+
+public class TuChongApi {
+
+    /**
+     * img_id:26326835
+     * https://api.tuchong.com/images/26326835/exif   额外信息
+     * public static String pic_newst = "https://api.tuchong.com/discover/-2/category";
+     * public static String pic_choice = "https://api.tuchong.com/discover/-3/category";
+     * public static String pic_recommend = "https://api.tuchong.com/feed-app";
+     */
+    public static String tuchong_hot = "https://api.tuchong.com/discover/-1/category";
+}
