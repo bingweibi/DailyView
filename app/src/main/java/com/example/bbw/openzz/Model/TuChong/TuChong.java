@@ -25,12 +25,19 @@ public class TuChong {
         this.postLists = postLists;
     }
 
-    public class PostList {
+    public static class PostList {
 
         private String url;
         private String excerpt;
         private List<Images> imagesList;
         private List<Site> siteList;
+
+        public PostList(String url, String excerpt, List<Images> imagesList, List<Site> siteList) {
+            this.url = url;
+            this.excerpt = excerpt;
+            this.imagesList = imagesList;
+            this.siteList = siteList;
+        }
 
         public String getExcerpt() {
             return excerpt;
@@ -64,8 +71,13 @@ public class TuChong {
             this.imagesList = imagesList;
         }
 
-        public class Images{
+        public static class Images{
+
             private int img_id;
+
+            public Images(int img_id) {
+                this.img_id = img_id;
+            }
 
             public int getImg_id() {
                 return img_id;
@@ -76,9 +88,14 @@ public class TuChong {
             }
         }
 
-        public class Site{
+        public static class Site{
             private String name;
             private String icon;
+
+            public Site(String name, String icon) {
+                this.name = name;
+                this.icon = icon;
+            }
 
             public String getName() {
                 return name;

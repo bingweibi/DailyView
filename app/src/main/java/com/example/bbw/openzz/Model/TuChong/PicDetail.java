@@ -24,9 +24,14 @@ public class PicDetail {
         this.abstractList = abstractList;
     }
 
-    private class Abstract {
+    private static class Abstract {
         public String desc;
         public String content;
+
+        public Abstract(String desc, String content) {
+            this.desc = desc;
+            this.content = content;
+        }
 
         public String getDesc() {
             return desc;

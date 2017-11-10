@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DailyDetail" />
-        <activity android:name=".activity.DailyComments"/>
+        <activity android:name=".activity.DailyComments" />
+        <activity android:name=".activity.PicDetail"></activity>
     </application>
 
 </manifest>

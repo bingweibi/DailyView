@@ -29,7 +29,12 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
         this.clickListener = clickListener;
     }
 
-    public static interface OnItemClickListener{
+    public interface OnItemClickListener{
+        /**
+         * 点击接口
+         * @param view
+         * @param position
+         */
         void onClick(View view,int position);
     }
 
@@ -78,7 +83,6 @@ public class DailyAdapter extends RecyclerView.Adapter<DailyAdapter.ViewHolder>{
 
     @Override
     public int getItemCount() {
-
         return mDailyList.size();
     }
 }

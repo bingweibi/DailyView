@@ -5,13 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.bbw.openzz.Model.ZhiHuDaily.StoryComments;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.adapter.DailyCommentsAdapter;
@@ -81,7 +78,7 @@ public class DailyComments extends AppCompatActivity {
     private void showStoryComments(String responseText) {
 
         try {
-            storyComments = ResponseHandleUtility.handStoryComments(responseText);
+            storyComments = ResponseHandleUtility.handleStoryComments(responseText);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

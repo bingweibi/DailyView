@@ -16,9 +16,8 @@ import android.view.MenuItem;
 import com.example.bbw.openzz.adapter.ViewPagerAdapter;
 import com.example.bbw.openzz.fragments.BaseFragment;
 import com.example.bbw.openzz.fragments.FragmentOne;
+import com.example.bbw.openzz.fragments.FragmentTwo;
 import com.example.bbw.openzz.util.BottomNavigationViewHelper;
-
-import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity  {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new FragmentOne());
-        adapter.addFragment(BaseFragment.newInstance("图虫"));
+        adapter.addFragment(new FragmentTwo());
         adapter.addFragment(BaseFragment.newInstance("白日梦"));
         adapter.addFragment(BaseFragment.newInstance("关于"));
         mViewPager.setAdapter(adapter);
