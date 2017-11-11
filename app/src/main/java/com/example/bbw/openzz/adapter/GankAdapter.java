@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.example.bbw.openzz.Model.TuChong.TuChong;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.R;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -20,11 +20,16 @@ import java.util.List;
  * @author bbw
  */
 
-public class TuChongAdapter extends RecyclerView.Adapter<TuChongAdapter.ViewHolder> {
+public class GankAdapter extends RecyclerView.Adapter<GankAdapter.ViewHolder> {
 
-    private List<TuChong.PostList> mPicList;
+    private List<Gank.results> mPicList;
     private Context mContext;
     private OnItemClickListener clickListener;
+
+    public GankAdapter(List<Gank.results> mResults, Context mContext) {
+        this.mPicList = mResults;
+        this.mContext = mContext;
+    }
 
     public void setClickListener(OnItemClickListener clickListener){
         this.clickListener = clickListener;
@@ -40,18 +45,22 @@ public class TuChongAdapter extends RecyclerView.Adapter<TuChongAdapter.ViewHold
     }
 
     @Override
-    public TuChongAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GankAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tuchong_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gank_item,parent,false);
         final ViewHolder mViewHolder = new ViewHolder(view);
         return mViewHolder;
     }
 
+    @GlideModule
+    public final class MyAppGlideModule extends AppGlideModule {}
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        TuChong.PostList postList = mPicList.get(position);
-        Glide.with(mContext).load(postList.getUrl()).into(holder.tuChongPic);
+        Gank.results results = mPicList.get(position);
+        Glide.with(mContext).load(results.getUrl()).into(holder.gankPic);
+
     }
 
     @Override
@@ -61,13 +70,13 @@ public class TuChongAdapter extends RecyclerView.Adapter<TuChongAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        ImageView tuChongPic;
-        View tuChongView;
+        ImageView gankPic;
+        View gankView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tuChongView = itemView;
-            tuChongPic = itemView.findViewById(R.id.tuchong_image);
+            gankView = itemView;
+            gankPic = itemView.findViewById(R.id.gank_image);
             itemView.setOnClickListener(this);
         }
 
@@ -77,10 +86,5 @@ public class TuChongAdapter extends RecyclerView.Adapter<TuChongAdapter.ViewHold
                 clickListener.onClick(itemView,getAdapterPosition());
             }
         }
-    }
-
-    public TuChongAdapter(List<TuChong.PostList> mPostList, Context mContext) {
-        this.mPicList = mPostList;
-        this.mContext = mContext;
     }
 }

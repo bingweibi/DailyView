@@ -7,8 +7,8 @@
         android:title="日报" />
     <item
         android:id="@+id/item_pic"
-        android:icon="@mipmap/ic_tuchong_gray"
-        android:title="图虫" />
+        android:icon="@mipmap/ic_gank_gray"
+        android:title="Gank" />
     <item
         android:id="@+id/item_video"
         android:icon="@mipmap/ic_yixi_gray"

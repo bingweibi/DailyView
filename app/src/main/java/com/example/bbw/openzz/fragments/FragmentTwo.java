@@ -6,16 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.example.bbw.openzz.Model.TuChong.TuChong;
+import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.activity.PicDetail;
-import com.example.bbw.openzz.adapter.TuChongAdapter;
+import com.example.bbw.openzz.adapter.GankAdapter;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
 
@@ -29,24 +29,24 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.example.bbw.openzz.api.TuChongApi.tuchong_hot;
+import static com.example.bbw.openzz.api.GankApi.gank;
 
 
 /**
  * Created by bbw on 2017/10/21.
  * @author bibingwei
- * 图虫
+ * Gank
  */
 
 public class FragmentTwo extends Fragment {
 
-    private List<TuChong.PostList> responsePicList;
-    private List<TuChong.PostList> showPicList = new ArrayList<>();
+    private List<Gank.results> responsePicList;
+    private List<Gank.results> showPicList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestPic(tuchong_hot);
+        requestPic(gank);
     }
 
     @Nullable
@@ -55,17 +55,16 @@ public class FragmentTwo extends Fragment {
 
         View mView = inflater.inflate(R.layout.fragment_two,container,false);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
-
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        TuChongAdapter picAdapter = new TuChongAdapter(showPicList,getContext());
+        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+        GankAdapter picAdapter = new GankAdapter(showPicList,getContext());
         mRecyclerView.setAdapter(picAdapter);
-        picAdapter.setClickListener(new TuChongAdapter.OnItemClickListener() {
+        picAdapter.setClickListener(new GankAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getContext(),PicDetail.class);
-                intent.putExtra("picId",showPicList.get(position).getUrl());//暂定
+                //暂定
+                intent.putExtra("picId",showPicList.get(position).getUrl());
                 startActivity(intent);
             }
         });
@@ -91,12 +90,10 @@ public class FragmentTwo extends Fragment {
 
     private void initPic(String responseText) {
         try {
-            responsePicList = ResponseHandleUtility.handleTuChongPic(responseText);
+            responsePicList = ResponseHandleUtility.handleGankPic(responseText);
             showPicList.clear();
             for (int i =0;i<responsePicList.size();i++){
-                TuChong.PostList pic = new TuChong.PostList(
-                        responsePicList.get(i).getUrl(),responsePicList.get(i).getExcerpt(),
-                        responsePicList.get(i).getImagesList(),responsePicList.get(i).getSiteList());
+                Gank.results pic = new Gank.results(responsePicList.get(i).getUrl());
                 showPicList.add(pic);
             }
         } catch (JSONException e) {

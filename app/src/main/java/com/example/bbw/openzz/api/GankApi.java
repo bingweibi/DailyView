@@ -5,7 +5,7 @@ package com.example.bbw.openzz.api;
  * @author bibingwei
  */
 
-public class TuChongApi {
+public class GankApi {
 
     /**
      * img_id:26326835
@@ -13,6 +13,7 @@ public class TuChongApi {
      * public static String pic_newst = "https://api.tuchong.com/discover/-2/category";
      * public static String pic_choice = "https://api.tuchong.com/discover/-3/category";
      * public static String pic_recommend = "https://api.tuchong.com/feed-app";
+     * public static String tuchong_hot = "https://api.tuchong.com/discover/-1/category"
      */
-    public static String tuchong_hot = "https://api.tuchong.com/discover/-1/category";
+    public static String gank = "http://gank.io/api/data/%E7%A6%8F%E5%88%A9/20/1";
 }
