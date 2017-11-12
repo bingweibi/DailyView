@@ -16,9 +16,11 @@ import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.activity.PicDetail;
 import com.example.bbw.openzz.adapter.GankAdapter;
+import com.example.bbw.openzz.util.Event;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -63,8 +65,7 @@ public class FragmentTwo extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getContext(),PicDetail.class);
-                //暂定
-                intent.putExtra("picId",showPicList.get(position).getUrl());
+                EventBus.getDefault().postSticky(new Event(showPicList,position));
                 startActivity(intent);
             }
         });

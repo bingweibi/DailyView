@@ -47,13 +47,10 @@ public class GankAdapter extends RecyclerView.Adapter<GankAdapter.ViewHolder> {
     @Override
     public GankAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gank_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gank_item, parent, false);
         final ViewHolder mViewHolder = new ViewHolder(view);
         return mViewHolder;
     }
-
-    @GlideModule
-    public final class MyAppGlideModule extends AppGlideModule {}
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
