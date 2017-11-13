@@ -49,9 +49,10 @@ public class PicDetail extends AppCompatActivity {
         super.onStart();
         EventBus.getDefault().register(this);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        mLinearLayoutManager.scrollToPositionWithOffset(picPosition,0);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         new LinearSnapHelper().attachToRecyclerView(mRecyclerView);
-        GankPicAdapter picAdapter = new GankPicAdapter(showPicList,getApplicationContext(),picPosition);
+        GankPicAdapter picAdapter = new GankPicAdapter(showPicList,getApplicationContext());
         mRecyclerView.setAdapter(picAdapter);
         picAdapter.notifyDataSetChanged();
     }
