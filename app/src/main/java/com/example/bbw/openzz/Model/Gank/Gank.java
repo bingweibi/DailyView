@@ -27,10 +27,21 @@ public class Gank {
 
     public static class results {
 
+        private String desc;
+
         private String url;
 
-        public results(String url) {
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public results(String url,String desc) {
             this.url = url;
+            this.desc = desc;
         }
 
         public String getUrl() {

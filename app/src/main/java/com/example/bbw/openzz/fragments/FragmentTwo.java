@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.activity.PicDetail;
-import com.example.bbw.openzz.adapter.GankAdapter;
+import com.example.bbw.openzz.adapter.GankPicAdapter;
 import com.example.bbw.openzz.util.Event;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
@@ -59,9 +58,9 @@ public class FragmentTwo extends Fragment {
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
         StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
-        GankAdapter picAdapter = new GankAdapter(showPicList,getContext());
+        GankPicAdapter picAdapter = new GankPicAdapter(showPicList,getContext());
         mRecyclerView.setAdapter(picAdapter);
-        picAdapter.setClickListener(new GankAdapter.OnItemClickListener() {
+        picAdapter.setClickListener(new GankPicAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getContext(),PicDetail.class);
@@ -91,10 +90,10 @@ public class FragmentTwo extends Fragment {
 
     private void initPic(String responseText) {
         try {
-            responsePicList = ResponseHandleUtility.handleGankPic(responseText);
+            responsePicList = ResponseHandleUtility.handleGank(responseText);
             showPicList.clear();
             for (int i =0;i<responsePicList.size();i++){
-                Gank.results pic = new Gank.results(responsePicList.get(i).getUrl());
+                Gank.results pic = new Gank.results(responsePicList.get(i).getUrl(),responsePicList.get(i).getDesc());
                 showPicList.add(pic);
             }
         } catch (JSONException e) {

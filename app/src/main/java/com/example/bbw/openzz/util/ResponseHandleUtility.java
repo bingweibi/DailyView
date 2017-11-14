@@ -63,7 +63,7 @@ public class ResponseHandleUtility {
         return storyCommentsList;
     }
 
-    public static List<Gank.results> handleGankPic(String responseText) throws JSONException{
+    public static List<Gank.results> handleGank(String responseText) throws JSONException{
 
         JSONObject jsonObject = new JSONObject(responseText);
         JSONArray jsonArray = jsonObject.getJSONArray("results");
@@ -71,7 +71,8 @@ public class ResponseHandleUtility {
         for (int i=0;i<jsonArray.length();i++){
             JSONObject picInJson = jsonArray.getJSONObject(i);
             String url = picInJson.optString("url");
-            Gank.results picMessage = new Gank.results(url);
+            String desc = picInJson.optString("desc");
+            Gank.results picMessage = new Gank.results(url,desc);
             results.add(picMessage);
         }
         return results;

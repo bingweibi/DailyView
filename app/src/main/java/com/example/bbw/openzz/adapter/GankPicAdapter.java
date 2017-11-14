@@ -8,43 +8,54 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
 import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.R;
 
 import java.util.List;
 
 /**
- * Created by bbw on 2017/11/12.
+ * Created by bbw on 2017/11/10.
  * @author bbw
  */
 
-public class GankPicAdapter extends  RecyclerView.Adapter<GankPicAdapter.PicViewHolder> {
+public class GankPicAdapter extends RecyclerView.Adapter<GankPicAdapter.ViewHolder> {
 
     private List<Gank.results> mPicList;
     private Context mContext;
-    private int picPosition;
+    private OnItemClickListener clickListener;
 
     public GankPicAdapter(List<Gank.results> mResults, Context mContext) {
         this.mPicList = mResults;
         this.mContext = mContext;
-        this.picPosition = picPosition;
+    }
+
+    public void setClickListener(OnItemClickListener clickListener){
+        this.clickListener = clickListener;
+    }
+
+    public interface OnItemClickListener{
+        /**
+         * 点击接口
+         * @param view
+         * @param position
+         */
+        void onClick(View view, int position);
     }
 
     @Override
-    public GankPicAdapter.PicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GankPicAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gank_imageitem,parent,false);
-        final PicViewHolder mViewHolder = new PicViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gank_item, parent, false);
+        final ViewHolder mViewHolder = new ViewHolder(view);
         return mViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(GankPicAdapter.PicViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
 
         Gank.results results = mPicList.get(position);
         Glide.with(mContext).load(results.getUrl()).into(holder.gankPic);
+
     }
 
     @Override
@@ -52,15 +63,23 @@ public class GankPicAdapter extends  RecyclerView.Adapter<GankPicAdapter.PicView
         return mPicList.size();
     }
 
-    class PicViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView gankPic;
         View gankView;
 
-        public PicViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             gankView = itemView;
             gankPic = itemView.findViewById(R.id.gank_image);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (clickListener != null){
+                clickListener.onClick(itemView,getAdapterPosition());
+            }
         }
     }
 }

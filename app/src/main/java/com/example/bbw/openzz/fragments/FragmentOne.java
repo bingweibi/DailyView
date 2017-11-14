@@ -55,7 +55,7 @@ public class FragmentOne extends Fragment {
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

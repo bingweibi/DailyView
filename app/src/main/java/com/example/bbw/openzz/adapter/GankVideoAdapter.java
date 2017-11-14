@@ -6,32 +6,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
 import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.R;
 
 import java.util.List;
 
+import cn.jzvd.JZVideoPlayer;
+
 /**
- * Created by bbw on 2017/11/10.
+ * Created by bbw on 2017/11/14.
  * @author bbw
  */
 
-public class GankAdapter extends RecyclerView.Adapter<GankAdapter.ViewHolder> {
+public class GankVideoAdapter extends RecyclerView.Adapter<GankVideoAdapter.ViewHolder>{
 
-    private List<Gank.results> mPicList;
+    private List<Gank.results> mVideoList;
     private Context mContext;
-    private OnItemClickListener clickListener;
+    private GankVideoAdapter.OnItemClickListener clickListener;
 
-    public GankAdapter(List<Gank.results> mResults, Context mContext) {
-        this.mPicList = mResults;
+    public GankVideoAdapter(List<Gank.results> mResults, Context mContext) {
+        this.mVideoList = mResults;
         this.mContext = mContext;
     }
 
-    public void setClickListener(OnItemClickListener clickListener){
+    public void setClickListener(GankVideoAdapter.OnItemClickListener clickListener){
         this.clickListener = clickListener;
     }
 
@@ -45,35 +46,34 @@ public class GankAdapter extends RecyclerView.Adapter<GankAdapter.ViewHolder> {
     }
 
     @Override
-    public GankAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GankVideoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.gank_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.video_item, parent, false);
         final ViewHolder mViewHolder = new ViewHolder(view);
         return mViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(GankVideoAdapter.ViewHolder holder, int position) {
 
-        Gank.results results = mPicList.get(position);
-        Glide.with(mContext).load(results.getUrl()).into(holder.gankPic);
-
+        Gank.results results = mVideoList.get(position);
+        holder.gankVideo.setUp(results.getUrl(), JZVideoPlayer.SCREEN_WINDOW_NORMAL,results.getDesc());
     }
 
     @Override
     public int getItemCount() {
-        return mPicList.size();
+        return mVideoList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        ImageView gankPic;
-        View gankView;
+        cn.jzvd.JZVideoPlayerStandard gankVideo;
+        View gankVideoView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            gankView = itemView;
-            gankPic = itemView.findViewById(R.id.gank_image);
+            gankVideoView = itemView;
+            gankVideo = itemView.findViewById(R.id.video_player);
             itemView.setOnClickListener(this);
         }
 
