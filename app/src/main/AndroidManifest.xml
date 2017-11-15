@@ -13,8 +13,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".activity.DailyDetail" />
+        <activity android:name=".activity.DailyComments" />
+        <activity android:name=".activity.PicDetail" />
+        <activity android:name=".activity.AppStart"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -23,9 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DailyDetail" />
-        <activity android:name=".activity.DailyComments" />
-        <activity android:name=".activity.PicDetail"></activity>
     </application>
 
 </manifest>
