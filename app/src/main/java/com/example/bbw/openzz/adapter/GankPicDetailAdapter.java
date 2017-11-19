@@ -25,6 +25,7 @@ public class GankPicDetailAdapter extends  RecyclerView.Adapter<GankPicDetailAda
     private int picPosition;
 
     public GankPicDetailAdapter(List<Gank.results> mResults, Context mContext) {
+
         this.mPicList = mResults;
         this.mContext = mContext;
         this.picPosition = picPosition;

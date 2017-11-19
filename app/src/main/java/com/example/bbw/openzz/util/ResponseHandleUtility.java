@@ -72,7 +72,8 @@ public class ResponseHandleUtility {
             JSONObject picInJson = jsonArray.getJSONObject(i);
             String url = picInJson.optString("url");
             String desc = picInJson.optString("desc");
-            Gank.results picMessage = new Gank.results(url,desc);
+            String who = picInJson.optString("who");
+            Gank.results picMessage = new Gank.results(url,desc,who);
             results.add(picMessage);
         }
         return results;

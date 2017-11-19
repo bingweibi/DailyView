@@ -15,13 +15,14 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="true"/>
         <activity android:name=".activity.DailyDetail" />
         <activity android:name=".activity.DailyComments" />
         <activity android:name=".activity.PicDetail" />
-        <activity android:name=".activity.AppStart"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait">
+        <activity android:name=".activity.AppStart">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -18,6 +18,12 @@ import com.example.bbw.openzz.activity.DailyDetail;
 import com.example.bbw.openzz.adapter.DailyAdapter;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
+import com.scwang.smartrefresh.header.MaterialHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONException;
 
@@ -41,6 +47,7 @@ public class FragmentOne extends Fragment {
 
     private List<ZhiHuDaily.StoryBean> responseStoriesList;
     private List<ZhiHuDaily.StoryBean> showStoriesList = new ArrayList<>();
+    private RefreshLayout mRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +60,7 @@ public class FragmentOne extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View mView = inflater.inflate(R.layout.fragment_one,container,false);
+        mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
         try {
@@ -60,6 +68,17 @@ public class FragmentOne extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
+        mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(1800);
+                requestMessage(daily_url);
+            }
+        });
+
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);

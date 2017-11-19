@@ -19,6 +19,12 @@ import com.example.bbw.openzz.adapter.GankPicAdapter;
 import com.example.bbw.openzz.util.Event;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
+import com.scwang.smartrefresh.header.MaterialHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -32,6 +38,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.example.bbw.openzz.api.GankApi.gank;
+import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 
 /**
@@ -44,6 +51,7 @@ public class FragmentTwo extends Fragment {
 
     private List<Gank.results> responsePicList;
     private List<Gank.results> showPicList = new ArrayList<>();
+    private RefreshLayout mRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +64,19 @@ public class FragmentTwo extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View mView = inflater.inflate(R.layout.fragment_two,container,false);
+        mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
+
+        mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
+        mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(1800);
+                requestPic(gank);
+            }
+        });
+
         StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
         GankPicAdapter picAdapter = new GankPicAdapter(showPicList,getContext());
@@ -96,7 +116,7 @@ public class FragmentTwo extends Fragment {
             responsePicList = ResponseHandleUtility.handleGank(responseText);
             showPicList.clear();
             for (int i =0;i<responsePicList.size();i++){
-                Gank.results pic = new Gank.results(responsePicList.get(i).getUrl(),responsePicList.get(i).getDesc());
+                Gank.results pic = new Gank.results(responsePicList.get(i).getUrl(),responsePicList.get(i).getDesc(),responsePicList.get(i).getWho());
                 showPicList.add(pic);
             }
         } catch (JSONException e) {

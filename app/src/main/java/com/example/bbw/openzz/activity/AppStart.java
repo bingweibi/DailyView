@@ -15,7 +15,7 @@ import com.example.bbw.openzz.R;
  */
 public class AppStart extends AppCompatActivity {
 
-    private static final long SPLASH_DELAY_MILLIS = 2000;
+    private static final long SPLASH_DELAY_MILLIS = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

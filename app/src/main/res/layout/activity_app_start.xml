@@ -14,15 +14,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center_horizontal"
         android:text="OPEN VIEW"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="35dp"
         android:textSize="35sp"
-        android:textColor="#fff"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="wakaka"
-        android:layout_marginBottom="38dp"
-        android:textSize="25sp"
         android:textColor="#fff"/>
 </LinearLayout>

@@ -31,6 +31,16 @@ public class Gank {
 
         private String url;
 
+        private String who;
+
+        public String getWho() {
+            return who;
+        }
+
+        public void setWho(String who) {
+            this.who = who;
+        }
+
         public String getDesc() {
             return desc;
         }
@@ -39,9 +49,10 @@ public class Gank {
             this.desc = desc;
         }
 
-        public results(String url,String desc) {
+        public results(String url,String desc,String who) {
             this.url = url;
             this.desc = desc;
+            this.who = who;
         }
 
         public String getUrl() {
