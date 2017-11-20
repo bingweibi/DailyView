@@ -1,6 +1,7 @@
 package com.example.bbw.openzz.util;
 
 import com.example.bbw.openzz.Model.Gank.Gank;
+import com.example.bbw.openzz.Model.NeihanVideo.NeihanVideo;
 import com.example.bbw.openzz.Model.ZhiHuDaily.StoryComments;
 import com.example.bbw.openzz.Model.ZhiHuDaily.StoryDetail;
 import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
@@ -75,6 +76,20 @@ public class ResponseHandleUtility {
             String who = picInJson.optString("who");
             Gank.results picMessage = new Gank.results(url,desc,who);
             results.add(picMessage);
+        }
+        return results;
+    }
+
+    public static List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> handleVideo(String responseText) throws JSONException{
+
+        JSONObject jsonObject = new JSONObject(responseText);
+        JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("data");
+        List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> results = new ArrayList<>();
+        for (int i=0;i<jsonArray.length();i++){
+            JSONObject videoInJson = jsonArray.getJSONObject(i).getJSONObject("group");
+            String url = videoInJson.optString("mp4_url");
+            NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup videoMessage = new NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup(url);
+            results.add(videoMessage);
         }
         return results;
     }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.example.bbw.openzz.Model.Gank.Gank;
+import com.example.bbw.openzz.Model.NeihanVideo.NeihanVideo;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
@@ -43,8 +44,8 @@ import static com.example.bbw.openzz.api.VideoApi.videoURL;
 
 public class FragmentThree extends Fragment{
 
-    private List<Gank.results> responseVideoList;
-    private List<Gank.results> showVideoList = new ArrayList<>();
+    private List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> responseVideoList;
+    private List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> showVideoList = new ArrayList<>();
     private RefreshLayout mRefreshLayout;
     private VideoView mVideoView;
     private Button mButton;
@@ -83,8 +84,7 @@ public class FragmentThree extends Fragment{
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mVideoView.setVideoURI(Uri.parse(showVideoList.get(0).getUrl()));
-                mVideoView.setVideoURI(Uri.parse("http://ic.snssdk.com/neihan/video/playback/?video_id=cbe1506a33564968be703c8dfdbf6e63&quality=480p&line=0&is_gif=0&device_platform=.mp4"));
+                mVideoView.setVideoURI(Uri.parse(showVideoList.get(0).getMp4_url()));
                 mVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
@@ -116,10 +116,10 @@ public class FragmentThree extends Fragment{
 
     private void initVideo(String responseText) {
         try {
-            responseVideoList = ResponseHandleUtility.handleGank(responseText);
+            responseVideoList = ResponseHandleUtility.handleVideo(responseText);
             showVideoList.clear();
             for (int i = 0; i< responseVideoList.size(); i++){
-                Gank.results video = new Gank.results(responseVideoList.get(i).getUrl(),responseVideoList.get(i).getDesc(),responseVideoList.get(i).getUrl());
+                NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup video = new NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup(responseVideoList.get(i).getMp4_url());
                 showVideoList.add(video);
             }
         } catch (JSONException e) {
