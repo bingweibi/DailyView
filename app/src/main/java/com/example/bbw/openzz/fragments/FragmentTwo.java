@@ -1,8 +1,10 @@
 package com.example.bbw.openzz.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -30,15 +32,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.example.bbw.openzz.api.GankApi.gank;
-import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
+import static com.example.bbw.openzz.api.GankApi.gankPic;
 
 
 /**
@@ -56,7 +59,6 @@ public class FragmentTwo extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestPic(gank);
     }
 
     @Nullable
@@ -73,7 +75,7 @@ public class FragmentTwo extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(1800);
-                requestPic(gank);
+                requestPic(gankPic);
             }
         });
 
@@ -93,13 +95,13 @@ public class FragmentTwo extends Fragment {
         return mView;
     }
 
-    private void requestPic(String address) {
+    public void requestPic(String address) {
 
         HttpUntil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
-                Toast.makeText(getContext(),"404.....", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"网络出现故障...", Toast.LENGTH_SHORT).show();
                 Looper.loop();
             }
 

@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -46,16 +48,16 @@ public class FragmentThree extends Fragment{
 
     private List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> responseVideoList;
     private List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> showVideoList = new ArrayList<>();
-    private RefreshLayout mRefreshLayout;
     private VideoView mVideoView;
     private Button mButton;
+    private Button pause;
+
     private TextView mTextView;
     private TextView mTextViewAuthor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestVideo(videoURL);
     }
 
     @Nullable
@@ -63,22 +65,10 @@ public class FragmentThree extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View mView = inflater.inflate(R.layout.fragment_three,container,false);
-        mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         mVideoView = mView.findViewById(R.id.video_player);
-        mTextView = mView.findViewById(R.id.videoTitle);
-        mTextViewAuthor = mView.findViewById(R.id.videoAuthor);
         mButton = mView.findViewById(R.id.start);
 
-        mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
-        mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(1800);
-                requestVideo(videoURL);
-            }
-        });
-
+        requestVideo(videoURL);
         mButton.setText("开始");
         mVideoView.requestFocus();
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -93,10 +83,26 @@ public class FragmentThree extends Fragment{
                 });
             }
         });
+
+        mVideoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                switch (what) {
+                    case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                        //显示 Loading 图
+                        break;
+                    case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+                        //隐藏 Loading 图
+                        break;
+                        default:
+                }
+                return false;
+            }
+        });
         return mView;
     }
 
-    private void requestVideo(String address) {
+    public void requestVideo(String address) {
 
         HttpUntil.sendOkHttpRequest(address, new Callback() {
             @Override

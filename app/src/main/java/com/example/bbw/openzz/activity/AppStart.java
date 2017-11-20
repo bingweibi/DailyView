@@ -9,19 +9,23 @@ import android.view.animation.Animation;
 
 import com.example.bbw.openzz.MainActivity;
 import com.example.bbw.openzz.R;
+import com.example.bbw.openzz.fragments.FragmentOne;
+import com.example.bbw.openzz.fragments.FragmentTwo;
+
+import static com.example.bbw.openzz.api.GankApi.gankPic;
+import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 /**
  * @author bbw
  */
 public class AppStart extends AppCompatActivity {
 
-    private static final long SPLASH_DELAY_MILLIS = 1000;
+    private static final long SPLASH_DELAY_MILLIS = 2000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_start);
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
