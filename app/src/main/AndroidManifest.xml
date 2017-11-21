@@ -16,8 +16,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".activity.DailyDetail" />
         <activity android:name=".activity.DailyComments" />
         <activity android:name=".activity.PicDetail" />

@@ -88,7 +88,8 @@ public class ResponseHandleUtility {
         for (int i=0;i<jsonArray.length();i++){
             JSONObject videoInJson = jsonArray.getJSONObject(i).getJSONObject("group");
             String url = videoInJson.optString("mp4_url");
-            NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup videoMessage = new NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup(url);
+            String text = videoInJson.optString("text");
+            NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup videoMessage = new NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup(url,text);
             results.add(videoMessage);
         }
         return results;
