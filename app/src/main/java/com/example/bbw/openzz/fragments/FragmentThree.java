@@ -1,23 +1,17 @@
 package com.example.bbw.openzz.fragments;
 
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
-import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.Model.NeihanVideo.NeihanVideo;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.util.HttpUntil;
@@ -28,6 +22,7 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -46,19 +41,12 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.scwang.smartrefresh.header.MaterialHeader;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -96,14 +84,19 @@ public class FragmentThree extends Fragment{
         requestVideo(videoURL);
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+        return mView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         initPlayer();
         palyVideo();
-        return mView;
     }
 
     private void initPlayer() {
@@ -136,13 +129,11 @@ public class FragmentThree extends Fragment{
         //Prepare the player with the source.
         mSimpleExoPlayer.prepare(videoSource);
         //添加监听的listener
-//        mSimpleExoPlayer.setVideoListener(mVideoListener);
         mSimpleExoPlayer.addListener(eventListener);
-//        mSimpleExoPlayer.setTextOutput(mOutput);
         mSimpleExoPlayer.setPlayWhenReady(true);
     }
 
-    private ExoPlayer.EventListener eventListener = new ExoPlayer.EventListener() {
+    private Player.EventListener eventListener = new Player.EventListener() {
         @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
             Log.d("log","onTimelineChanged");
@@ -161,19 +152,9 @@ public class FragmentThree extends Fragment{
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-            switch (playbackState){
-                case ExoPlayer.STATE_ENDED:
-                    //Stop playback and return to start position
-                    setPlayPause(false);
-                    mSimpleExoPlayer.seekTo(0);
-                    break;
-                case ExoPlayer.STATE_READY:
-                    break;
-                case ExoPlayer.STATE_BUFFERING:
-                    break;
-                case ExoPlayer.STATE_IDLE:
-                    break;
-                    default:
+            if (playbackState == Player.STATE_ENDED) {
+            setPlayPause(true);
+            mSimpleExoPlayer.seekTo(0);
             }
         }
 
@@ -200,25 +181,6 @@ public class FragmentThree extends Fragment{
 
     private void setPlayPause(boolean play){
         mSimpleExoPlayer.setPlayWhenReady(play);
-    }
-
-    private String stringForTime(int timeMs) {
-        StringBuilder mFormatBuilder;
-        Formatter mFormatter;
-        mFormatBuilder = new StringBuilder();
-        mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
-        int totalSeconds =  timeMs / 1000;
-
-        int seconds = totalSeconds % 60;
-        int minutes = (totalSeconds / 60) % 60;
-        int hours   = totalSeconds / 3600;
-
-        mFormatBuilder.setLength(0);
-        if (hours > 0) {
-            return mFormatter.format("%d:%02d:%02d", hours, minutes, seconds).toString();
-        } else {
-            return mFormatter.format("%02d:%02d", minutes, seconds).toString();
-        }
     }
 
     public void requestVideo(String address) {
@@ -254,13 +216,14 @@ public class FragmentThree extends Fragment{
 
     @Override
     public void onPause() {
-        super.onPause();
         mSimpleExoPlayer.stop();
+        //mSimpleExoPlayer.release();
+        super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mSimpleExoPlayer.release();
+        super.onDestroy();
     }
 }

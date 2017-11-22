@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.bbw.openzz.Model.Gank.Gank;
 import com.example.bbw.openzz.R;
 
@@ -56,7 +55,6 @@ public class GankPicAdapter extends RecyclerView.Adapter<GankPicAdapter.ViewHold
 
         Gank.results results = mPicList.get(position);
         Glide.with(mContext).load(results.getUrl()).into(holder.gankPic);
-
     }
 
     @Override
@@ -69,7 +67,7 @@ public class GankPicAdapter extends RecyclerView.Adapter<GankPicAdapter.ViewHold
         ImageView gankPic;
         View gankView;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             gankView = itemView;
             gankPic = itemView.findViewById(R.id.gank_image);

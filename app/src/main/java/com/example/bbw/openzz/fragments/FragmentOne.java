@@ -62,7 +62,6 @@ public class FragmentOne extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        new FragmentThree().requestVideo(videoURL);
     }
 
     @Nullable
@@ -73,13 +72,12 @@ public class FragmentOne extends Fragment {
         mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
-        requestMessage(daily_url);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String dailyString = preferences.getString("daily",null);
         if (dailyString != null){
             try {
-                responseStoriesList  = ResponseHandleUtility.handleZhuHuDailyLatest(dailyString);
                 showStoriesList.clear();
+                responseStoriesList  = ResponseHandleUtility.handleZhuHuDailyLatest(dailyString);
                 for(int i=0;i<responseStoriesList.size();i++){
                     ZhiHuDaily.StoryBean stories =
                             new ZhiHuDaily.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());
@@ -97,17 +95,16 @@ public class FragmentOne extends Fragment {
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(1800);
+                refreshlayout.finishRefresh(3000);
                 requestMessage(daily_url);
             }
         });
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(2000);
+                refreshlayout.finishRefresh(3000);
                 String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
                 requestMessage(daily_old_url + "/" + today);
-                showStoriesList.clear();
             }
         });
 
@@ -115,6 +112,7 @@ public class FragmentOne extends Fragment {
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         DailyAdapter dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
+        dailyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(dailyAdapter);
         dailyAdapter.setClickListener(new DailyAdapter.OnItemClickListener() {
             @Override
@@ -124,7 +122,6 @@ public class FragmentOne extends Fragment {
                 startActivity(intent);
             }
         });
-        dailyAdapter.notifyDataSetChanged();
         return mView;
     }
 
@@ -156,8 +153,8 @@ public class FragmentOne extends Fragment {
 
     private void initStories(String responseStories) {
         try {
-            responseStoriesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
             showStoriesList.clear();
+            responseStoriesList  = ResponseHandleUtility.handleZhuHuDailyLatest(responseStories);
             for(int i=0;i<responseStoriesList.size();i++){
                 ZhiHuDaily.StoryBean stories =
                         new ZhiHuDaily.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());

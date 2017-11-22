@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.bbw.openzz.Model.Gank.Gank;
+import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.activity.PicDetail;
 import com.example.bbw.openzz.adapter.GankPicAdapter;
@@ -42,6 +43,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.example.bbw.openzz.api.GankApi.gankPic;
+import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 
 /**
@@ -69,12 +71,29 @@ public class FragmentTwo extends Fragment {
         mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String gankString = preferences.getString("gankPic",null);
+        if (gankString != null){
+            try {
+                showPicList.clear();
+                responsePicList  = ResponseHandleUtility.handleGank(gankString);
+                for(int i=0;i<responsePicList.size();i++){
+                    Gank.results pic = new Gank.results(responsePicList.get(i).getUrl(),responsePicList.get(i).getDesc(),responsePicList.get(i).getWho());
+                    showPicList.add(pic);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            requestPic(gankPic);
+        }
+
         mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
         mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(1800);
+                refreshlayout.finishRefresh(3000);
                 requestPic(gankPic);
             }
         });
@@ -108,6 +127,9 @@ public class FragmentTwo extends Fragment {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+                editor.putString("gankPic",responseText);
+                editor.apply();
                 initPic(responseText);
             }
         });
@@ -115,8 +137,8 @@ public class FragmentTwo extends Fragment {
 
     private void initPic(String responseText) {
         try {
-            responsePicList = ResponseHandleUtility.handleGank(responseText);
             showPicList.clear();
+            responsePicList = ResponseHandleUtility.handleGank(responseText);
             for (int i =0;i<responsePicList.size();i++){
                 Gank.results pic = new Gank.results(responsePicList.get(i).getUrl(),responsePicList.get(i).getDesc(),responsePicList.get(i).getWho());
                 showPicList.add(pic);
