@@ -58,6 +58,7 @@ public class FragmentOne extends Fragment {
     private List<ZhiHuDaily.StoryBean> responseStoriesList;
     private List<ZhiHuDaily.StoryBean> showStoriesList = new ArrayList<>();
     private RefreshLayout mRefreshLayout;
+    DailyAdapter dailyAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +72,15 @@ public class FragmentOne extends Fragment {
         View mView = inflater.inflate(R.layout.fragment_one,container,false);
         mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
+
+        mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
+        mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
+        dailyAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(dailyAdapter);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String dailyString = preferences.getString("daily",null);
@@ -88,15 +98,24 @@ public class FragmentOne extends Fragment {
             }
         }else{
             requestMessage(daily_url);
+            dailyAdapter.notifyDataSetChanged();
         }
 
-        mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
-        mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
+        dailyAdapter.setClickListener(new DailyAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent intent = new Intent(getContext(), DailyDetail.class);
+                intent.putExtra("storyId",showStoriesList.get(position).getId());
+                startActivity(intent);
+            }
+        });
+
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(3000);
                 requestMessage(daily_url);
+                dailyAdapter.notifyDataSetChanged();
             }
         });
         mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
@@ -105,21 +124,7 @@ public class FragmentOne extends Fragment {
                 refreshlayout.finishRefresh(3000);
                 String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
                 requestMessage(daily_old_url + "/" + today);
-            }
-        });
-
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        DailyAdapter dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
-        dailyAdapter.notifyDataSetChanged();
-        mRecyclerView.setAdapter(dailyAdapter);
-        dailyAdapter.setClickListener(new DailyAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Intent intent = new Intent(getContext(), DailyDetail.class);
-                intent.putExtra("storyId",showStoriesList.get(position).getId());
-                startActivity(intent);
+                dailyAdapter.notifyDataSetChanged();
             }
         });
         return mView;
