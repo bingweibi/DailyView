@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -57,7 +58,7 @@ public class FragmentOne extends Fragment {
 
     private List<ZhiHuDaily.StoryBean> responseStoriesList;
     private List<ZhiHuDaily.StoryBean> showStoriesList = new ArrayList<>();
-    private RefreshLayout mRefreshLayout;
+    private SwipeRefreshLayout mRefreshLayout;
     DailyAdapter dailyAdapter;
 
     @Override
@@ -71,19 +72,15 @@ public class FragmentOne extends Fragment {
 
         View mView = inflater.inflate(R.layout.fragment_one,container,false);
         mRefreshLayout = mView.findViewById(R.id.refreshLayout);
+        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
-        mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
-        mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
         dailyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(dailyAdapter);
-
-        requestMessage(daily_url);
-        dailyAdapter.notifyDataSetChanged();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String dailyString = preferences.getString("daily",null);
@@ -96,12 +93,12 @@ public class FragmentOne extends Fragment {
                             new ZhiHuDaily.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());
                     showStoriesList.add(stories);
                 }
+                dailyAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }else{
             requestMessage(daily_url);
-            dailyAdapter.notifyDataSetChanged();
         }
 
         dailyAdapter.setClickListener(new DailyAdapter.OnItemClickListener() {
@@ -113,23 +110,20 @@ public class FragmentOne extends Fragment {
             }
         });
 
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(3000);
+            public void onRefresh() {
                 requestMessage(daily_url);
-                dailyAdapter.notifyDataSetChanged();
             }
         });
-        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
-            @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(3000);
-                String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
-                requestMessage(daily_old_url + "/" + today);
-                dailyAdapter.notifyDataSetChanged();
-            }
-        });
+//        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+//            @Override
+//            public void onLoadmore(RefreshLayout refreshlayout) {
+//                refreshlayout.finishRefresh(3000);
+//                String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
+//                requestMessage(daily_old_url + "/" + today);
+//            }
+//        });
         return mView;
     }
 
@@ -145,6 +139,12 @@ public class FragmentOne extends Fragment {
                 Looper.prepare();
                 Toast.makeText(getContext(),"404.....", Toast.LENGTH_SHORT).show();
                 Looper.loop();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(false);
+                    }
+                });
             }
 
             @Override
@@ -155,6 +155,12 @@ public class FragmentOne extends Fragment {
                 editor.putString("daily",responseText);
                 editor.apply();
                 initStories(responseText);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(false);
+                    }
+                });
             }
         });
     }
@@ -168,6 +174,12 @@ public class FragmentOne extends Fragment {
                         new ZhiHuDaily.StoryBean(responseStoriesList.get(i).getTitle(),responseStoriesList.get(i).getImages(),responseStoriesList.get(i).getId());
                 showStoriesList.add(stories);
             }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dailyAdapter.notifyDataSetChanged();
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

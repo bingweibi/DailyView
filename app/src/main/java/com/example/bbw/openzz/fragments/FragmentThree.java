@@ -82,8 +82,8 @@ public class FragmentThree extends Fragment{
             //界面可见时
             if(getUserVisibleHint()){
                 mSimpleExoPlayer.setPlayWhenReady(true);
+                playVideo();
             }else {
-                requestVideo(videoURL);
                 mSimpleExoPlayer.setPlayWhenReady(false);
             }
         }catch (Exception e){
@@ -99,19 +99,14 @@ public class FragmentThree extends Fragment{
         mVideoView = mView.findViewById(R.id.video_player);
         mTextView = mView.findViewById(R.id.videoTitle);
 
+        requestVideo(videoURL);
         initPlayer();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         return mView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        playVideo();
     }
 
     private void initPlayer() {

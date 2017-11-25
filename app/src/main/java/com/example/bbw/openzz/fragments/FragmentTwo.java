@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -56,7 +57,8 @@ public class FragmentTwo extends Fragment {
 
     private List<Gank.results> responsePicList;
     private List<Gank.results> showPicList = new ArrayList<>();
-    private RefreshLayout mRefreshLayout;
+    private SwipeRefreshLayout mRefreshLayout;
+    GankPicAdapter picAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +73,19 @@ public class FragmentTwo extends Fragment {
         mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
+        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+        picAdapter = new GankPicAdapter(showPicList,getContext());
+        mRecyclerView.setAdapter(picAdapter);
+        picAdapter.setClickListener(new GankPicAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Intent intent = new Intent(getContext(),PicDetail.class);
+                EventBus.getDefault().postSticky(new Event(showPicList,position));
+                startActivity(intent);
+            }
+        });
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String gankString = preferences.getString("gankPic",null);
         if (gankString != null){
@@ -81,6 +96,7 @@ public class FragmentTwo extends Fragment {
                     Gank.results pic = new Gank.results(responsePicList.get(i).getUrl(),responsePicList.get(i).getDesc(),responsePicList.get(i).getWho());
                     showPicList.add(pic);
                 }
+                picAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -88,29 +104,13 @@ public class FragmentTwo extends Fragment {
             requestPic(gankPic);
         }
 
-        mRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
-        mRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(3000);
+            public void onRefresh() {
                 requestPic(gankPic);
             }
         });
 
-        StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
-        GankPicAdapter picAdapter = new GankPicAdapter(showPicList,getContext());
-        mRecyclerView.setAdapter(picAdapter);
-        picAdapter.setClickListener(new GankPicAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Intent intent = new Intent(getContext(),PicDetail.class);
-                EventBus.getDefault().postSticky(new Event(showPicList,position));
-                startActivity(intent);
-            }
-        });
-        picAdapter.notifyDataSetChanged();
         return mView;
     }
 
@@ -122,6 +122,12 @@ public class FragmentTwo extends Fragment {
                 Looper.prepare();
                 Toast.makeText(getContext(),"网络出现故障...", Toast.LENGTH_SHORT).show();
                 Looper.loop();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(false);
+                    }
+                });
             }
 
             @Override
@@ -131,6 +137,12 @@ public class FragmentTwo extends Fragment {
                 editor.putString("gankPic",responseText);
                 editor.apply();
                 initPic(responseText);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(false);
+                    }
+                });
             }
         });
     }
@@ -143,6 +155,12 @@ public class FragmentTwo extends Fragment {
                 Gank.results pic = new Gank.results(responsePicList.get(i).getUrl(),responsePicList.get(i).getDesc(),responsePicList.get(i).getWho());
                 showPicList.add(pic);
             }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    picAdapter.notifyDataSetChanged();
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
