@@ -82,6 +82,9 @@ public class FragmentOne extends Fragment {
         dailyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(dailyAdapter);
 
+        requestMessage(daily_url);
+        dailyAdapter.notifyDataSetChanged();
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String dailyString = preferences.getString("daily",null);
         if (dailyString != null){

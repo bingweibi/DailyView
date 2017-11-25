@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bbw.openzz.Model.NeihanVideo.NeihanVideo;
@@ -17,12 +17,13 @@ import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -53,6 +54,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.example.bbw.openzz.api.VideoApi.videoURL;
+import static com.scwang.smartrefresh.layout.constant.DimensionStatus.Default;
 
 /**
  * Created by bbw on 2017/11/14.
@@ -65,38 +67,51 @@ public class FragmentThree extends Fragment{
     private List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> showVideoList = new ArrayList<>();
     private SimpleExoPlayerView mVideoView;
     private SimpleExoPlayer mSimpleExoPlayer;
-    private Button mButton;
-
+    private TextView mTextView;
+    protected View mView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        try{
+            //界面可见时
+            if(getUserVisibleHint()){
+                mSimpleExoPlayer.setPlayWhenReady(true);
+            }else {
+                requestVideo(videoURL);
+                mSimpleExoPlayer.setPlayWhenReady(false);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View mView = inflater.inflate(R.layout.fragment_three,container,false);
+        mView = inflater.inflate(R.layout.fragment_three,container,false);
         mVideoView = mView.findViewById(R.id.video_player);
-        mButton = mView.findViewById(R.id.start);
+        mTextView = mView.findViewById(R.id.videoTitle);
 
-        requestVideo(videoURL);
-
+        initPlayer();
         try {
-            Thread.sleep(1500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         return mView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        initPlayer();
-        palyVideo();
+        playVideo();
     }
 
     private void initPlayer() {
@@ -106,23 +121,19 @@ public class FragmentThree extends Fragment{
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector trackSelector =
                 new DefaultTrackSelector(videoTackSelectionFactory);
-        LoadControl loadControl = new DefaultLoadControl();
         //2.创建ExoPlayer
-        mSimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector,loadControl);
-        //3.创建SimpleExoPlayerView
-
-        //4.为SimpleExoPlayer设置播放器
+        mSimpleExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),trackSelector);
+        //3.为SimpleExoPlayer设置播放器
         mVideoView.setPlayer(mSimpleExoPlayer);
     }
 
-    private void palyVideo() {
+    private void playVideo() {
 
         // 生成加载媒体数据的DataSource实例。
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getActivity(),
                 Util.getUserAgent(getActivity(),"useExoplayer"),null);
         // 生成用于解析媒体数据的Extractor实例。
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
         // MediaSource代表要播放的媒体。
         MediaSource videoSource = new ExtractorMediaSource(Uri.parse(showVideoList.get(0).getMp4_url()),dataSourceFactory,extractorsFactory,
                 null,null);
@@ -130,7 +141,8 @@ public class FragmentThree extends Fragment{
         mSimpleExoPlayer.prepare(videoSource);
         //添加监听的listener
         mSimpleExoPlayer.addListener(eventListener);
-        mSimpleExoPlayer.setPlayWhenReady(true);
+        mSimpleExoPlayer.setPlayWhenReady(false);
+        mTextView.setText(showVideoList.get(0).getText());
     }
 
     private Player.EventListener eventListener = new Player.EventListener() {
@@ -217,7 +229,6 @@ public class FragmentThree extends Fragment{
     @Override
     public void onPause() {
         mSimpleExoPlayer.stop();
-        //mSimpleExoPlayer.release();
         super.onPause();
     }
 
