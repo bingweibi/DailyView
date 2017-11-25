@@ -16,27 +16,19 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.bbw.openzz.Model.Gank.Gank;
-import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.activity.PicDetail;
 import com.example.bbw.openzz.adapter.GankPicAdapter;
 import com.example.bbw.openzz.util.Event;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
-import com.scwang.smartrefresh.header.MaterialHeader;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -44,7 +36,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.example.bbw.openzz.api.GankApi.gankPic;
-import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 
 /**

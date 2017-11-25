@@ -48,7 +48,6 @@ public class PicDetail extends AppCompatActivity {
         new LinearSnapHelper().attachToRecyclerView(mRecyclerView);
         GankPicDetailAdapter picAdapter = new GankPicDetailAdapter(showPicList,getApplicationContext());
         mRecyclerView.setAdapter(picAdapter);
-        picAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
