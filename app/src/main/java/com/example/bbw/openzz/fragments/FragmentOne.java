@@ -2,6 +2,7 @@ package com.example.bbw.openzz.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -15,37 +16,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.bbw.openzz.MainActivity;
 import com.example.bbw.openzz.Model.ZhiHuDaily.ZhiHuDaily;
 import com.example.bbw.openzz.R;
-import com.example.bbw.openzz.activity.AppStart;
 import com.example.bbw.openzz.activity.DailyDetail;
 import com.example.bbw.openzz.adapter.DailyAdapter;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
-import com.scwang.smartrefresh.header.MaterialHeader;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONException;
-
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.example.bbw.openzz.api.GankApi.gankPic;
-import static com.example.bbw.openzz.api.VideoApi.videoURL;
-import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_old_url;
 import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 /**
@@ -59,7 +45,8 @@ public class FragmentOne extends Fragment {
     private List<ZhiHuDaily.StoryBean> responseStoriesList;
     private List<ZhiHuDaily.StoryBean> showStoriesList = new ArrayList<>();
     private SwipeRefreshLayout mRefreshLayout;
-    DailyAdapter dailyAdapter;
+    private DailyAdapter dailyAdapter;
+    private RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,7 +60,7 @@ public class FragmentOne extends Fragment {
         View mView = inflater.inflate(R.layout.fragment_one,container,false);
         mRefreshLayout = mView.findViewById(R.id.refreshLayout);
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        RecyclerView mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
+        mRecyclerView = mView.findViewById(R.id.fragment_recyclerView);
 
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getContext());
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -81,6 +68,15 @@ public class FragmentOne extends Fragment {
         dailyAdapter = new DailyAdapter(getContext(),showStoriesList);
         dailyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(dailyAdapter);
+
+        //实现上拉加载更多
+        View lastView = mRecyclerView.getLayoutManager().getChildAt(mRecyclerView.getLayoutManager().getChildCount()-1);
+        int lastChildBottom = lastView.getBottom();
+        int recyclerBottom = mRecyclerView.getBottom() - mRecyclerView.getPaddingBottom();
+        int lastPosition = mRecyclerView.getLayoutManager().getPosition(lastView);
+        if (lastChildBottom == recyclerBottom && lastPosition == mRecyclerView.getLayoutManager().getChildCount()-1){
+            //进行加载操作
+        }
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String dailyString = preferences.getString("daily",null);
@@ -116,15 +112,12 @@ public class FragmentOne extends Fragment {
                 requestMessage(daily_url);
             }
         });
-//        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
-//            @Override
-//            public void onLoadmore(RefreshLayout refreshlayout) {
-//                refreshlayout.finishRefresh(3000);
-//                String today = new SimpleDateFormat("yyyyMMdd").format(new Date());
-//                requestMessage(daily_old_url + "/" + today);
-//            }
-//        });
         return mView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     /**
@@ -183,10 +176,5 @@ public class FragmentOne extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }
