@@ -16,14 +16,10 @@ import com.example.bbw.openzz.Model.NeihanVideo.NeihanVideo;
 import com.example.bbw.openzz.R;
 import com.example.bbw.openzz.util.HttpUntil;
 import com.example.bbw.openzz.util.ResponseHandleUtility;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -54,7 +50,6 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 import static com.example.bbw.openzz.api.VideoApi.videoURL;
-import static com.scwang.smartrefresh.layout.constant.DimensionStatus.Default;
 
 /**
  * Created by bbw on 2017/11/14.

@@ -2,7 +2,6 @@ package com.example.bbw.openzz.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
@@ -25,13 +24,16 @@ import com.example.bbw.openzz.util.ResponseHandleUtility;
 
 import org.json.JSONException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_old_url;
 import static com.example.bbw.openzz.api.ZhiHuDailyApi.daily_url;
 
 /**
@@ -47,6 +49,7 @@ public class FragmentOne extends Fragment {
     private SwipeRefreshLayout mRefreshLayout;
     private DailyAdapter dailyAdapter;
     private RecyclerView mRecyclerView;
+    private String today;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,14 +72,13 @@ public class FragmentOne extends Fragment {
         dailyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(dailyAdapter);
 
-        //实现上拉加载更多
-        View lastView = mRecyclerView.getLayoutManager().getChildAt(mRecyclerView.getLayoutManager().getChildCount()-1);
-        int lastChildBottom = lastView.getBottom();
-        int recyclerBottom = mRecyclerView.getBottom() - mRecyclerView.getPaddingBottom();
-        int lastPosition = mRecyclerView.getLayoutManager().getPosition(lastView);
-        if (lastChildBottom == recyclerBottom && lastPosition == mRecyclerView.getLayoutManager().getChildCount()-1){
-            //进行加载操作
-        }
+        today = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        return mView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String dailyString = preferences.getString("daily",null);
@@ -112,7 +114,26 @@ public class FragmentOne extends Fragment {
                 requestMessage(daily_url);
             }
         });
-        return mView;
+
+//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+//                int totalItemCount = mRecyclerView.getAdapter().getItemCount();
+//                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+//                int visibleItemCount = mRecyclerView.getChildCount();
+//
+//                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition == totalItemCount -1 && visibleItemCount > 0){
+//                    requestMessage(daily_old_url+today);
+//                }
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//            }
+//        });
     }
 
     @Override
