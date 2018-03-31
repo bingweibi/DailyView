@@ -58,7 +58,6 @@ import static com.example.bbw.openzz.api.VideoApi.videoURL;
 
 public class FragmentThree extends Fragment{
 
-    private List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> responseVideoList;
     private List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> showVideoList = new ArrayList<>();
     private SimpleExoPlayerView mVideoView;
     private SimpleExoPlayer mSimpleExoPlayer;
@@ -68,22 +67,6 @@ public class FragmentThree extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        try{
-            //界面可见时
-            if(getUserVisibleHint()){
-                mSimpleExoPlayer.setPlayWhenReady(true);
-                playVideo();
-            }else {
-                mSimpleExoPlayer.setPlayWhenReady(false);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     @Nullable
@@ -102,6 +85,34 @@ public class FragmentThree extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        mSimpleExoPlayer.stop();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mSimpleExoPlayer.release();
+        super.onDestroy();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        try{
+            //界面可见时
+            if(getUserVisibleHint()){
+                mSimpleExoPlayer.setPlayWhenReady(true);
+                playVideo();
+            }else {
+                mSimpleExoPlayer.setPlayWhenReady(false);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void initPlayer() {
@@ -138,17 +149,16 @@ public class FragmentThree extends Fragment{
     private Player.EventListener eventListener = new Player.EventListener() {
         @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
-            Log.d("log","onTimelineChanged");
+
         }
 
         @Override
         public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-            Log.d("log","onTracksChanged");
+
         }
 
         @Override
         public void onLoadingChanged(boolean isLoading) {
-            Log.d("log","onLoadingChanged");
         }
 
         @Override
@@ -167,17 +177,14 @@ public class FragmentThree extends Fragment{
 
         @Override
         public void onPlayerError(ExoPlaybackException error) {
-            Log.d("log","onPlaybackError: "+error.getMessage());
         }
 
         @Override
         public void onPositionDiscontinuity() {
-            Log.d("log","onPositionDiscontinuity");
         }
 
         @Override
         public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-            Log.d("log","MainActivity.onPlaybackParametersChanged."+playbackParameters.toString());
         }
     };
 
@@ -205,10 +212,10 @@ public class FragmentThree extends Fragment{
 
     private void initVideo(String responseText) {
         try {
-            responseVideoList = ResponseHandleUtility.handleVideo(responseText);
+            List<NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup> responseVideoList = ResponseHandleUtility.handleVideo(responseText);
             showVideoList.clear();
             for (int i = 0; i< responseVideoList.size(); i++){
-                NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup video = new NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup(responseVideoList.get(i).getMp4_url(),responseVideoList.get(i).getText());
+                NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup video = new NeihanVideo.NeihanData.NeihanVideoData.NeihanDataGroup(responseVideoList.get(i).getMp4_url(), responseVideoList.get(i).getText());
                 showVideoList.add(video);
             }
         } catch (JSONException e) {
@@ -216,15 +223,4 @@ public class FragmentThree extends Fragment{
         }
     }
 
-    @Override
-    public void onPause() {
-        mSimpleExoPlayer.stop();
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mSimpleExoPlayer.release();
-        super.onDestroy();
-    }
 }

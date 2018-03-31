@@ -74,4 +74,5 @@ public class FragmentFour extends Fragment{
             }
         });
     }
+
 }

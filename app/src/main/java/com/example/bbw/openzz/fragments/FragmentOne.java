@@ -114,26 +114,6 @@ public class FragmentOne extends Fragment {
                 requestMessage(daily_url);
             }
         });
-
-//        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-//                int totalItemCount = mRecyclerView.getAdapter().getItemCount();
-//                int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-//                int visibleItemCount = mRecyclerView.getChildCount();
-//
-//                if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItemPosition == totalItemCount -1 && visibleItemCount > 0){
-//                    requestMessage(daily_old_url+today);
-//                }
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//            }
-//        });
     }
 
     @Override

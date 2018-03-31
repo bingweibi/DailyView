@@ -18,18 +18,14 @@ public class NeihanVideo {
     public static class NeihanData {
 
         private List<NeihanVideoData> data;
-
         public List<NeihanVideoData> getData() {
             return data;
         }
-
         public static class NeihanVideoData {
             public NeihanDataGroup getGroup() {
                 return group;
             }
-
             private NeihanDataGroup group;
-
             public static class NeihanDataGroup {
                 private String mp4_url;
                 private String text;

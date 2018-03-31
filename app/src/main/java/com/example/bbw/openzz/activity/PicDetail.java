@@ -50,12 +50,6 @@ public class PicDetail extends AppCompatActivity {
         mRecyclerView.setAdapter(picAdapter);
     }
 
-    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
-    public void onEvent(Event event){
-        showPicList = event.getShowPicList();
-        picPosition = event.getPosition();
-    }
-
     @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
@@ -66,4 +60,11 @@ public class PicDetail extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
+    @Subscribe(sticky = true,threadMode = ThreadMode.MAIN)
+    public void onEvent(Event event){
+        showPicList = event.getShowPicList();
+        picPosition = event.getPosition();
+    }
+
 }

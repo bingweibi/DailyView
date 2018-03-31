@@ -37,7 +37,6 @@ import okhttp3.Response;
 
 import static com.example.bbw.openzz.api.GankApi.gankPic;
 
-
 /**
  * Created by bbw on 2017/10/21.
  * @author bibingwei
@@ -105,6 +104,11 @@ public class FragmentTwo extends Fragment {
         return mView;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
     public void requestPic(String address) {
 
         HttpUntil.sendOkHttpRequest(address, new Callback() {
@@ -157,8 +161,4 @@ public class FragmentTwo extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 }

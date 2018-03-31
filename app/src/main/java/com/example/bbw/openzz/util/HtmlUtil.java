@@ -38,7 +38,7 @@ public class HtmlUtil {
      * @param url String
      * @return String
      */
-    public static String createCssTag(String url) {
+    private static String createCssTag(String url) {
         return String.format(NEEDED_FORMAT_CSS_TAG, url);
     }
 
@@ -48,7 +48,7 @@ public class HtmlUtil {
      * @param urls List<String>
      * @return String
      */
-    public static String createCssTag(List<String> urls) {
+    private static String createCssTag(List<String> urls) {
         final StringBuilder sb = new StringBuilder();
         for (String url : urls) {
             sb.append(createCssTag(url));
@@ -62,7 +62,7 @@ public class HtmlUtil {
      * @param url String
      * @return String
      */
-    public static String createJsTag(String url) {
+    private static String createJsTag(String url) {
         return String.format(NEEDED_FORMAT_JS_TAG, url);
     }
 
@@ -72,7 +72,7 @@ public class HtmlUtil {
      * @param urls List<String>
      * @return String
      */
-    public static String createJsTag(List<String> urls) {
+    private static String createJsTag(List<String> urls) {
         final StringBuilder sb = new StringBuilder();
         for (String url : urls) {
             sb.append(createJsTag(url));
@@ -107,10 +107,9 @@ public class HtmlUtil {
         return createHtmlData(body, css, js);
     }
 
-    public static StringBuffer handleHtml(String body) {
+    private static StringBuffer handleHtml(String body) {
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("<html><head><link rel=\"stylesheet\" type=\"text/css\" href=\"css/detail.css\" ></head>");
-//        stringBuffer.append(isNight ? "<body class=\"night\">" : "<body>");
         stringBuffer.append(body);
         stringBuffer.append("</body></html>");
         return stringBuffer;
