@@ -4,4 +4,4 @@
 ### 第三个模块的视屏播放，上划切换视频
 ### 第四个模块是我的简介
 ## 这个APP是我个人练习的作品，侵删
-![](http://p2g00vblr.bkt.clouddn.com/2018-03-31_19_07_04.gif)
+![](http://p2g00vblr.bkt.clouddn.com/dailyview.gif)
