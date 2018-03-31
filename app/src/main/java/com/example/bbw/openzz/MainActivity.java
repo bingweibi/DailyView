@@ -4,6 +4,7 @@ package com.example.bbw.openzz;
  * @author bibingwei
  */
 
+import android.graphics.PixelFormat;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //闪屏
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
 
         mViewPager = findViewById(R.id.fragment_ViewPager);
         mBottomNavigationView = findViewById(R.id.bottom_navigation);

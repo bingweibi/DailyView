@@ -19,10 +19,6 @@
         android:layout_height="5dp"
         android:background="@drawable/bottom_shadow" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -32,20 +28,14 @@
                 android:id="@+id/videoTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:textSize="18sp"
                 android:layout_margin="15dp"/>
             <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/video_player"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="match_parent"
                 android:background="#000"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:text="该写点什么好呢？"
-                android:layout_margin="5dp"/>
         </LinearLayout>
-    </ScrollView>
 </LinearLayout>
