@@ -49,7 +49,6 @@ public class FragmentOne extends Fragment {
     private SwipeRefreshLayout mRefreshLayout;
     private DailyAdapter dailyAdapter;
     private RecyclerView mRecyclerView;
-    private String today;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +71,6 @@ public class FragmentOne extends Fragment {
         dailyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(dailyAdapter);
 
-        today = new SimpleDateFormat("yyyyMMdd").format(new Date());
         return mView;
     }
 
@@ -98,7 +96,11 @@ public class FragmentOne extends Fragment {
         }else{
             requestMessage(daily_url);
         }
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         dailyAdapter.setClickListener(new DailyAdapter.OnItemClickListener() {
             @Override
             public void onClick(View view, int position) {

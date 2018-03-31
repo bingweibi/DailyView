@@ -12,7 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.bbw.openzz.adapter.ViewPagerAdapter;
 import com.example.bbw.openzz.fragments.FragmentFour;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity  {
     private ViewPager mViewPager;
     private MenuItem mMenuItem;
     private BottomNavigationView mBottomNavigationView;
+    private long mExitTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +41,11 @@ public class MainActivity extends AppCompatActivity  {
         mViewPager = findViewById(R.id.fragment_ViewPager);
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -56,7 +64,7 @@ public class MainActivity extends AppCompatActivity  {
                     case R.id.item_about:
                         mViewPager.setCurrentItem(3);
                         break;
-                        default:
+                    default:
                 }
                 return false;
             }
@@ -94,5 +102,28 @@ public class MainActivity extends AppCompatActivity  {
         adapter.addFragment(new FragmentThree());
         adapter.addFragment(new FragmentFour());
         mViewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+          if ((System.currentTimeMillis() - mExitTime) > 2000) {
+              // 如果两次按键时间间隔大于2000毫秒，则不退出
+              Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+              // 更新mExitTime
+              mExitTime = System.currentTimeMillis();
+          } else {
+              // 否则退出程序
+              System.exit(0);
+          }
+          return true;
+      }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
     }
 }
